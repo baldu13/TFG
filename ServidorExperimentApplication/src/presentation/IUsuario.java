@@ -4,9 +4,7 @@ import model.*;
 
 public interface IUsuario {
 
-	void enviaResultado(Usuario u, TipoResultado tr, Object valor);
+	void enviaResultado(Resultado r);
 	
-	boolean autentificar(String usuario, String clave);
-	
-	Ronda getRondaExperimento(Usuario u);
+	TipoExperimento logeaExperimento(String usuario, String clave);
 }

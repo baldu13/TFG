@@ -4,7 +4,7 @@ import model.*;
 
 public interface IAdministracion {
 
-	int crearExperimento(TipoExperimento tipo, Experimento e);
+	CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas);
 	
-	String generarInforme(int idExperimento);
+	Informe informeExperimento(int idExperimento);
 }
