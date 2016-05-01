@@ -96,9 +96,9 @@ public class ExperimentApplicationDAO {
 			pstmt.setDate(1, getActualSQLDate());
 			pstmt.setInt(2, e.getMaxRondas());
 			pstmt.setBoolean(3, e.isGrupal());
-			pstmt.setInt(5, e.getNumGrupos());
-			pstmt.setInt(6, e.getTipo().getId());
-			pstmt.setString(7, e.getNombre());
+			pstmt.setInt(4, e.getNumGrupos());
+			pstmt.setInt(5, e.getTipo().getId());
+			pstmt.setString(6, e.getNombre());
 			pstmt.execute();
 
 			sql = "SELECT id FROM experimento WHERE nombre=?";
@@ -306,45 +306,100 @@ public class ExperimentApplicationDAO {
 	}
 
 	public Informe getResultadosExperimento(int idExperimento) {
-		// TODO
 		Informe informe = new Informe();
 		informe.setExperimento(getExperimentoId(idExperimento));
 		List<Resultado> resultados = new LinkedList<Resultado>();
 		Resultado r;
 		
 		try {
-			//TODO
-			/*
-			sql = "SELECT id, nombre, fechaInicio, fechaFin, maxRondas, grupal, numGrupos, tipo FROM experimento WHERE id=?";
+			//Obtenemos el id de las participaciones en el experimento
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT id FROM participacion WHERE experimento=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, id);
+			pstmt.setInt(1, idExperimento);
 			ResultSet rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				e = new Experimento();
-				e.setId(rs.getInt("id"));
-				e.setFechaInicio(rs.getDate("fechaInicio"));
-				e.setFechaFin(rs.getDate("fechaFin"));
-				e.setGrupal(rs.getBoolean("grupal"));
-				e.setMaxRondas(rs.getInt("maxRondas"));
-				e.setNumGrupos(rs.getInt("numGrupos"));
-				int tipo = rs.getInt("tipo");
-				sql = "SELECT tipo FROM tipoexperimento WHERE id=?";
+			
+			sql = "SELECT id, tipoResultado, participacion, valorTexto, valorNumerico FROM resultado WHERE participacion=?";
+			while(rs.next()){
+				int idParticipacion = rs.getInt("id");
 				pstmt = conn.prepareStatement(sql);
-				pstmt.setInt(1, tipo);
-				rs = pstmt.executeQuery();
-				if (rs.next()) {
-					TipoExperimento te = new TipoExperimento();
-					te.setId(tipo);
-					te.setTipo(rs.getString("tipo"));
-					e.setTipo(te);
+				pstmt.setInt(1, idParticipacion);
+				ResultSet rs2 = pstmt.executeQuery();
+				while(rs2.next()){
+					r = new Resultado();
+					r.setId(rs2.getInt("id"));
+					r.setValorNumerico(rs2.getFloat("valorNumerico"));
+					r.setValorTexto(rs2.getString("valorTexto"));
+					r.setTipo(getTipoId(rs2.getInt("tipoResultado")));
+					r.setParticipante(getParticipanteId(rs2.getInt("participacion")));
+					resultados.add(r);
 				}
 			}
-			*/
+			informe.setResultados(resultados);
+			return informe;
+			
 		} catch (Exception ex) {
 			System.err.println("Error al obtener los resultados");
 			ex.printStackTrace();
 		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null);
+					//conn.close();
+			} catch (Exception ex) {
+				System.err.println("Error al cerrar la conexion");
+			}
+		}
+		
+		informe.setResultados(resultados);
+		return informe;
+	}
+
+	private Participacion getParticipanteId(int idParticipante) {
+		try{
+			Participacion p = null;
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT usuario, experimento, ronda FROM participacion WHERE id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idParticipante);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()){
+				p = new Participacion();
+				p.setId(idParticipante);
+				Ronda r = new Ronda();
+				r.setExperimento(getExperimentoId(rs.getInt("experimento")));
+				r.setNumRonda(rs.getInt("ronda"));
+				p.setRonda(r);
+			}
+			return p;
+		}catch(Exception e){
+			System.err.println("Error al obtener la participacion");
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private TipoResultado getTipoId(int idTipo) {
+		try{
+			TipoResultado tr = null;
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT tipo FROM tipoexperimento WHERE id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idTipo);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()){
+				tr = new TipoResultado();
+				tr.setId(idTipo);
+				tr.setEtiqueta(rs.getString("tipo"));
+			}
+			return tr;
+		}catch(Exception e){
+			System.err.println("Error al obtener el tipo de experimento");
+			e.printStackTrace();
+		}finally {
 			try {
 				if (stmt != null)
 					stmt.close();
@@ -356,9 +411,7 @@ public class ExperimentApplicationDAO {
 				System.err.println("Error al cerrar la conexion");
 			}
 		}
-		
-		informe.setResultados(resultados);
-		return informe;
+		return null;
 	}
 
 	/**
@@ -367,6 +420,7 @@ public class ExperimentApplicationDAO {
 	private Experimento getExperimentoId(int id) {
 		Experimento e = null;
 		try {
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			sql = "SELECT id, nombre, fechaInicio, fechaFin, maxRondas, grupal, numGrupos, tipo FROM experimento WHERE id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
@@ -395,17 +449,6 @@ public class ExperimentApplicationDAO {
 		} catch (Exception ex) {
 			System.err.println("Error al obtener el experimento");
 			ex.printStackTrace();
-		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (pstmt != null)
-					pstmt.close();
-				if (conn != null)
-					conn.close();
-			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
-			}
 		}
 		return e;
 	}

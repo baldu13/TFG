@@ -1,7 +1,6 @@
 package business;
 
 import model.*;
-import java.util.List;
 
 import dao.ExperimentApplicationDAO;
 
