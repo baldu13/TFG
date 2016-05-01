@@ -7,7 +7,7 @@ public class Resultado {
 	private TipoResultado tipo;
 	private Participacion participante;
 	private String valorTexto;
-	private double valorNumerico;
+	private float valorNumerico;
 	
 	//Metodos
 	public Resultado() {}
@@ -40,10 +40,10 @@ public class Resultado {
 		this.valorTexto = valorTexto;
 	}
 
-	public double getValorNumerico() {
+	public float getValorNumerico() {
 		return valorNumerico;
 	}
-	public void setValorNumerico(double valorNumerico) {
+	public void setValorNumerico(float valorNumerico) {
 		this.valorNumerico = valorNumerico;
 	}
 }

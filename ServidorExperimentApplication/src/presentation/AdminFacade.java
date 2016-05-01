@@ -21,7 +21,7 @@ public class AdminFacade implements IAdministracion{
 		Experimento e = new Experimento();
 		e.setMaxRondas(numRondas);
 		e.setNombre(nombre);
-		e.setTamanoGrupos(tamanoGrupos);
+		e.setNumGrupos(tamanoGrupos);
 		e.setTipo(tipo);
 		e.setFechaInicio(Calendar.getInstance().getTime());
 		return experimentos.creaExperimento(e,numUsuarios);

@@ -25,25 +25,18 @@ public class ExperimentosBusiness {
 			u.setClave(generatePassword(LONGITUD_CONTRASENA));
 			u = dao.creaUsuario(u);
 			response.getUsuarios().add(u);
-			//Lo añadimos al experimento
-			Participacion p = new Participacion();
-			p.setUsuario(u);
-			p.setNumGrupo(i%e.getTamanoGrupos()); //va añadiendo a todos los grupos por igual
-			for(int j=1; j<=e.getMaxRondas();j++){ //TODO: Para rondas variables falta
-				//Se le añade en todas las rondas
-				Ronda r = new Ronda();
-				r.setExperimento(e);
-				r.setNumRonda(j);
-				p.setRonda(r);
-				dao.creaParticipacion(p);
-			}
+		}
+		//Creamos los grupos para las rondas segun se pida
+		if(!e.isGrupal()){
+			insertaUsuariosSinGrupos(response, e);
+		}else{
+			insertaUsuariosGruposFijos(response, e);
 		}
 		return response;
 	}
 	
-	public TipoExperimento getExperimentoUsuario(Usuario u){
-		//TODO
-		return null;
+	public Experimento getExperimentoUsuario(Usuario u){
+		return dao.getExperimentoUsuario(u);
 	}
 	
 	/**
@@ -72,5 +65,46 @@ public class ExperimentosBusiness {
 		}
 		return password;
 	}
-		
+	
+	private void insertaUsuariosGruposFijos(CrearExperimentoResponseDTO response, Experimento e){
+		//Lo añadimos al experimento
+		int i = 1;
+		Participacion p;
+		Ronda r;
+		for(Usuario u : response.getUsuarios()){
+			p = new Participacion();
+			p.setUsuario(u);
+			p.setNumGrupo(i%e.getNumGrupos()); //va añadiendo a todos los grupos por igual
+			for(int j=1; j<=e.getMaxRondas();j++){
+				//Se le añade en todas las rondas
+				r = new Ronda();
+				r.setExperimento(e);
+				r.setNumRonda(j);
+				p.setRonda(r);
+				dao.creaParticipacion(p);
+			}
+			i++;
+		}
+	}
+	
+	private void insertaUsuariosSinGrupos(CrearExperimentoResponseDTO response, Experimento e){
+		//Lo añadimos al experimento
+		int i = 1;
+		Participacion p;
+		Ronda r;
+		for(Usuario u : response.getUsuarios()){
+			p = new Participacion();
+			p.setUsuario(u);
+			p.setNumGrupo(i); //Cada usuario un grupo
+			for(int j=1; j<=e.getMaxRondas();j++){
+				//Se le añade en todas las rondas
+				r = new Ronda();
+				r.setExperimento(e);
+				r.setNumRonda(j);
+				p.setRonda(r);
+				dao.creaParticipacion(p);
+			}
+			i++;
+		}
+	}	
 }

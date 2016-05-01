@@ -9,11 +9,14 @@ import model.Usuario;
 public class TestMySQL {
 	   
 	public static void main(String[] args) {
+		
 		ExperimentosBusiness eb = new ExperimentosBusiness();
-		Experimento e = new Experimento();
+		/*
+		 * Experimento e = new Experimento();
 		e.setNombre("Primer experimento");
-		e.setTamanoGrupos(2);
+		e.setNumGrupos(2);
 		e.setMaxRondas(3);
+		e.setGrupal(true);
 		TipoExperimento te = new TipoExperimento();
 		te.setId(1);
 		e.setTipo(te);
@@ -22,6 +25,11 @@ public class TestMySQL {
 			System.out.println("Usuario: "+u.getUsuario()+
 					"\nClave: "+u.getClave()+"\n");
 		}
+		*/
+		Usuario u = new Usuario();
+		u.setUsuario("ex9u0");
+		u.setClave("a5I0y5");
+		System.out.println(eb.getExperimentoUsuario(u).getTipo().getTipo());
 	}
 
 }

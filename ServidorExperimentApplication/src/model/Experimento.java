@@ -11,8 +11,7 @@ public class Experimento {
 	private Date fechaFin;
 	private int maxRondas;
 	private boolean grupal;
-	private boolean gruposVariables;
-	private int tamanoGrupos;
+	private int numGrupos;
 	private TipoExperimento tipo;
 	
 	//Metodos
@@ -53,18 +52,11 @@ public class Experimento {
 		this.grupal = grupal;
 	}
 
-	public boolean isGruposVariables() {
-		return gruposVariables;
+	public int getNumGrupos() {
+		return numGrupos;
 	}
-	public void setGruposVariables(boolean gruposVariables) {
-		this.gruposVariables = gruposVariables;
-	}
-
-	public int getTamanoGrupos() {
-		return tamanoGrupos;
-	}
-	public void setTamanoGrupos(int tamanoGrupos) {
-		this.tamanoGrupos = tamanoGrupos;
+	public void setNumGrupos(int numGrupos) {
+		this.numGrupos = numGrupos;
 	}
 
 	public TipoExperimento getTipo() {

@@ -6,5 +6,5 @@ public interface IUsuario {
 
 	void enviaResultado(Resultado r);
 	
-	TipoExperimento logeaExperimento(String usuario, String clave);
+	Experimento logeaExperimento(String usuario, String clave);
 }
