@@ -30,20 +30,25 @@ public class TestMySQL {
 		}
 		*/
 		
+		
+		
 		//Test lista experimentos
 		List<Experimento> lista = admin.getExperimentos();
-		
 		for(Experimento exp: lista){
 			System.out.println("ID: "+exp.getId());
 			System.out.println("Nombre: "+exp.getNombre());
 			System.out.println("Tipo: "+exp.getTipo().getTipo());
 		}
-		/*
-		Usuario u = new Usuario();
-		u.setUsuario("ex1u3");
-		u.setClave("f7FRKO");
-		System.out.println("Tipo experiento: "+eb.getExperimentoUsuario(u).getTipo().getTipo());
 		
+		
+		/*
+		//Test logearExperimento
+		System.out.println("Tipo experiento: "+user.logeaExperimento("ex1u5", "ebVeB7").getTipo().getTipo());
+		//Verificar en BBDD que el valor de participando ha cambiado a 1
+		//y que el tipo de experimento es correcto
+		*/
+		
+		/*
 		Resultado r = new Resultado();
 		TipoResultado tr = new TipoResultado();
 		tr.setId(1);

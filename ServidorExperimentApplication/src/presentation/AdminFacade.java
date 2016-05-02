@@ -19,17 +19,12 @@ public class AdminFacade implements IAdministracion{
 	
 	@Override
 	public CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas) {
-		try{
-			Experimento e = new Experimento();
-			e.setMaxRondas(numRondas);
-			e.setNombre(nombre);
-			e.setNumGrupos(tamanoGrupos);
-			e.setTipo(tipo);
-			return experimentos.creaExperimento(e,numUsuarios);
-		}catch(SQLException ex){
-			System.err.println("Ya existe un experimento con ese nombre");
-		}
-		return null;
+		Experimento e = new Experimento();
+		e.setMaxRondas(numRondas);
+		e.setNombre(nombre);
+		e.setNumGrupos(tamanoGrupos);
+		e.setTipo(tipo);
+		return experimentos.creaExperimento(e,numUsuarios);
 	}
 
 	@Override

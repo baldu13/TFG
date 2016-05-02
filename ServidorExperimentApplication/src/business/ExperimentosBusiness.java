@@ -16,10 +16,22 @@ public class ExperimentosBusiness {
 		dao = new ExperimentApplicationDAO();
 	}
 	
-	public CrearExperimentoResponseDTO creaExperimento(Experimento e, int numUsuarios) throws SQLException{
+	/**
+	 * Metodo que crea un experimento con los datos proporcionados
+	 * Crea las rondas especificadas y da de alta usuarios para ese experimento
+	 * @param e Experimento a dar de alta
+	 * @param numUsuarios Numero de usuarios que participaran en el experimento
+	 * @return
+	 */
+	public CrearExperimentoResponseDTO creaExperimento(Experimento e, int numUsuarios){
 		CrearExperimentoResponseDTO response = new CrearExperimentoResponseDTO();
 		//Creamos el experimento con las rondas
-		response.setIdExperimento(dao.creaExperimento(e));
+		try{
+			response.setIdExperimento(dao.creaExperimento(e));
+		}catch(SQLException ex){
+			//No se pudo crear el experimento ya que ya existe uno con ese nombre
+			return null;
+		}
 		//Creamos los usuarios necesarios y los anadimos al experimento
 		Usuario u;
 		for(int i=0; i<numUsuarios;i++){
@@ -40,7 +52,12 @@ public class ExperimentosBusiness {
 	}
 	
 	public Experimento getExperimentoUsuario(Usuario u){
-		return dao.getExperimentoUsuario(u);
+		Experimento e = dao.getExperimentoUsuario(u);
+		if(e!=null){
+			//El usuario esta participando
+			dao.setParticipando(u.getUsuario(), true);
+		}
+		return e;
 	}
 	
 	/**

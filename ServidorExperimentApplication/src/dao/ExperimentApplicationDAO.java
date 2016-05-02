@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -84,11 +85,10 @@ public class ExperimentApplicationDAO {
 	/**
 	 * Metodo que crea un experimento
 	 * 
-	 * @param e
-	 *            Experimento a crear
+	 * @param e Experimento a crear
 	 * @return id del experimento creado
 	 */
-	public int creaExperimento(Experimento e) {
+	public int creaExperimento(Experimento e) throws SQLException{
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
@@ -121,11 +121,6 @@ public class ExperimentApplicationDAO {
 				}
 				return e.getId();
 			}
-			return -1;
-
-		} catch (Exception ex) {
-			System.err.println("Error al crear el experimento");
-			ex.printStackTrace();
 			return -1;
 		} finally {
 			try {
@@ -286,7 +281,6 @@ public class ExperimentApplicationDAO {
 			sql = "INSERT INTO ronda(numRonda, experimento) VALUES (?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, r.getNumRonda());
-			System.out.println("Ronda: " + r.getNumRonda() + " Experimento: " + r.getExperimento().getId());
 			pstmt.setInt(2, r.getExperimento().getId());
 			pstmt.execute();
 		} catch (Exception ex) {
@@ -513,5 +507,32 @@ public class ExperimentApplicationDAO {
 			ex.printStackTrace();
 		}
 		return te;
+	}
+	
+	/**
+	 * Metodo para especificar si el usuario esta participando o no
+	 * @param idUsuario
+	 * @param estado
+	 */
+	public void setParticipando(String usuario, boolean estado){
+		try{
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "UPDATE usuario SET participando=? WHERE usuario=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setBoolean(1, estado);
+			pstmt.setString(2, usuario);
+			pstmt.execute();
+		}catch(Exception e){
+			System.err.println("Error al cambiar el estado del usuario");
+		}finally{
+			try{
+				if(pstmt!=null)
+					pstmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(Exception e){
+				System.err.println("Error la cerrar la conexion");
+			}
+		}
 	}
 }
