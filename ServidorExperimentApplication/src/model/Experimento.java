@@ -7,8 +7,7 @@ public class Experimento {
 	//Atributos
 	private int id;
 	private String nombre;
-	private Date fechaInicio;
-	private Date fechaFin;
+	private Date fecha;
 	private int maxRondas;
 	private boolean grupal;
 	private int numGrupos;
@@ -24,18 +23,11 @@ public class Experimento {
 		this.id = id;
 	}
 
-	public Date getFechaInicio() {
-		return fechaInicio;
+	public Date getFecha() {
+		return fecha;
 	}
-	public void setFechaInicio(Date fechaInicio) {
-		this.fechaInicio = fechaInicio;
-	}
-
-	public Date getFechaFin() {
-		return fechaFin;
-	}
-	public void setFechaFin(Date fechaFin) {
-		this.fechaFin = fechaFin;
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 
 	public int getMaxRondas() {

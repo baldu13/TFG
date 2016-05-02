@@ -1,6 +1,10 @@
 package business;
 
 import model.*;
+
+import java.sql.SQLException;
+import java.util.List;
+
 import dao.*;
 
 public class ExperimentosBusiness {
@@ -12,7 +16,7 @@ public class ExperimentosBusiness {
 		dao = new ExperimentApplicationDAO();
 	}
 	
-	public CrearExperimentoResponseDTO creaExperimento(Experimento e, int numUsuarios){
+	public CrearExperimentoResponseDTO creaExperimento(Experimento e, int numUsuarios) throws SQLException{
 		CrearExperimentoResponseDTO response = new CrearExperimentoResponseDTO();
 		//Creamos el experimento con las rondas
 		response.setIdExperimento(dao.creaExperimento(e));
@@ -106,5 +110,9 @@ public class ExperimentosBusiness {
 			}
 			i++;
 		}
+	}
+
+	public List<Experimento> getExperimentos() {
+		return dao.getExperimentos();
 	}	
 }

@@ -2,7 +2,8 @@ package presentation;
 
 import model.*;
 
-import java.util.Calendar;
+import java.sql.SQLException;
+import java.util.List;
 
 import business.*;
 
@@ -18,13 +19,17 @@ public class AdminFacade implements IAdministracion{
 	
 	@Override
 	public CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas) {
-		Experimento e = new Experimento();
-		e.setMaxRondas(numRondas);
-		e.setNombre(nombre);
-		e.setNumGrupos(tamanoGrupos);
-		e.setTipo(tipo);
-		e.setFechaInicio(Calendar.getInstance().getTime());
-		return experimentos.creaExperimento(e,numUsuarios);
+		try{
+			Experimento e = new Experimento();
+			e.setMaxRondas(numRondas);
+			e.setNombre(nombre);
+			e.setNumGrupos(tamanoGrupos);
+			e.setTipo(tipo);
+			return experimentos.creaExperimento(e,numUsuarios);
+		}catch(SQLException ex){
+			System.err.println("Ya existe un experimento con ese nombre");
+		}
+		return null;
 	}
 
 	@Override
@@ -32,4 +37,8 @@ public class AdminFacade implements IAdministracion{
 		return resultados.resultadosExperimento(idExperimento);
 	}
 
+	@Override 
+	public List<Experimento> getExperimentos(){
+		return experimentos.getExperimentos();
+	}
 }

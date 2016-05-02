@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class ExperimentApplicationDAO {
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			sql = "INSERT INTO experimento(fechaInicio, maxRondas, grupal, numGrupos, tipo, nombre) VALUES (?,?,?,?,?,?)";
+			sql = "INSERT INTO experimento(fecha, maxRondas, grupal, numGrupos, tipo, nombre) VALUES (?,?,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setDate(1, getActualSQLDate());
 			pstmt.setInt(2, e.getMaxRondas());
@@ -421,7 +422,7 @@ public class ExperimentApplicationDAO {
 		Experimento e = null;
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			sql = "SELECT id, nombre, fechaInicio, fechaFin, maxRondas, grupal, numGrupos, tipo FROM experimento WHERE id=?";
+			sql = "SELECT id, nombre, fecha, maxRondas, grupal, numGrupos, tipo FROM experimento WHERE id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
@@ -429,8 +430,7 @@ public class ExperimentApplicationDAO {
 			if (rs.next()) {
 				e = new Experimento();
 				e.setId(rs.getInt("id"));
-				e.setFechaInicio(rs.getDate("fechaInicio"));
-				e.setFechaFin(rs.getDate("fechaFin"));
+				e.setFecha(rs.getDate("fecha"));
 				e.setGrupal(rs.getBoolean("grupal"));
 				e.setMaxRondas(rs.getInt("maxRondas"));
 				e.setNumGrupos(rs.getInt("numGrupos"));
@@ -460,5 +460,58 @@ public class ExperimentApplicationDAO {
 	 */
 	private java.sql.Date getActualSQLDate() {
 		return new java.sql.Date(new java.util.Date().getTime());
+	}
+
+	/**
+	 * Retorna lista con todos los experimentos
+	 */
+	public List<Experimento> getExperimentos() {
+		try{
+			List<Experimento> lista = new ArrayList<Experimento>();
+			Experimento ex;
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT id, nombre, fecha, maxRondas, grupal, tipo, numGrupos FROM experimento";
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				ex = new Experimento();
+				ex.setId(rs.getInt("id"));
+				ex.setFecha(rs.getDate("fecha"));
+				ex.setGrupal(rs.getBoolean("grupal"));
+				ex.setMaxRondas(rs.getInt("maxRondas"));
+				ex.setNombre(rs.getString("nombre"));
+				ex.setNumGrupos(rs.getInt("numGrupos"));
+				ex.setTipo(getTipoExId(rs.getInt("tipo")));
+				lista.add(ex);
+			}
+			return lista;
+		}catch(Exception e){
+			System.err.println("Error al obtener loss experimentos");
+			e.printStackTrace();
+		}finally{
+			
+		}
+		return new ArrayList<Experimento>();
+	}
+
+	private TipoExperimento getTipoExId(int id) {
+		TipoExperimento te = null;
+		try {
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT tipo FROM tipoexperimento WHERE id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				te = new TipoExperimento();
+				te.setId(id);
+				te.setTipo(rs.getString("tipo"));
+			}
+		} catch (Exception ex) {
+			System.err.println("Error al obtener el experimento");
+			ex.printStackTrace();
+		}
+		return te;
 	}
 }
