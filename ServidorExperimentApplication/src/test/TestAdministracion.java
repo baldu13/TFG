@@ -12,7 +12,7 @@ public class TestAdministracion {
 	
 	public TestAdministracion() {
 		admin = new AdminFacade();
-		testCrearExperimento();
+		//testCrearExperimento();
 		testGetExperimentos();
 		testGetInformeExperimento();
 	}
@@ -53,6 +53,11 @@ public class TestAdministracion {
 	}
 	
 	public void testGetInformeExperimento(){
-		
+		System.out.println("TEST INFORME EXPERIMENTO\n");
+		Informe i = admin.informeExperimento(10);
+		System.out.println("Informe: "+i.getExperimento().getMaxRondas());
+		for(Resultado re: i.getResultados())
+			System.out.println("Resultado: "+re.getValorNumerico());
+		System.out.println("\n------------------------------------------\n\n");
 	}
 }

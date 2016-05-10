@@ -10,5 +10,8 @@ public interface IUsuario {
 	
 	boolean isRoundFinish(int idExperimento, int ronda, int idTipoExperimento);
 	
+	/**
+	 * Solo retorna el id del experimento y el tipo
+	 */
 	Experimento logeaExperimento(String usuario, String clave);
 }
