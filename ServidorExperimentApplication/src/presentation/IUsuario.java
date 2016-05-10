@@ -4,7 +4,11 @@ import model.*;
 
 public interface IUsuario {
 
-	void enviaResultado(Resultado r);
+	void enviaResultadoFondoPublico(ResultadoFondoPublico r);
+	
+	void enviaResultadoBeautyContest(ResultadoBeautyContest r);
+	
+	boolean isRoundFinish(int idExperimento, int ronda, int idTipoExperimento);
 	
 	Experimento logeaExperimento(String usuario, String clave);
 }

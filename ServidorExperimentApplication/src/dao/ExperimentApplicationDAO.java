@@ -212,10 +212,11 @@ public class ExperimentApplicationDAO {
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
+			int idUsuario = getIdParticipacionByUser(r.getParticipante().getUsuario().getUsuario());
 			sql = "INSERT INTO resultado(tipoResultado, participacion, valorTexto, valorNumerico) VALUES (?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, r.getTipo().getId());
-			pstmt.setInt(2, r.getParticipante().getId());
+			pstmt.setInt(2, idUsuario);
 			pstmt.setString(3, r.getValorTexto());
 			pstmt.setFloat(4, r.getValorNumerico());
 			pstmt.execute();
@@ -256,35 +257,6 @@ public class ExperimentApplicationDAO {
 			pstmt.execute();
 		} catch (Exception ex) {
 			System.err.println("Error al crear la participacion");
-			ex.printStackTrace();
-		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-				if (pstmt != null)
-					pstmt.close();
-				if (conn != null)
-					conn.close();
-			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
-			}
-		}
-	}
-
-	/**
-	 * Metodo para crear una ronda de un experimento
-	 */
-	private void creaRonda(Ronda r) {
-		try {
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			stmt = conn.createStatement();
-			sql = "INSERT INTO ronda(numRonda, experimento) VALUES (?,?)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, r.getNumRonda());
-			pstmt.setInt(2, r.getExperimento().getId());
-			pstmt.execute();
-		} catch (Exception ex) {
-			System.err.println("Error al crear la ronda");
 			ex.printStackTrace();
 		} finally {
 			try {
@@ -351,6 +323,141 @@ public class ExperimentApplicationDAO {
 		
 		informe.setResultados(resultados);
 		return informe;
+	}
+
+	/**
+	 * Retorna lista con todos los experimentos
+	 */
+	public List<Experimento> getExperimentos() {
+		try{
+			List<Experimento> lista = new ArrayList<Experimento>();
+			Experimento ex;
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT id, nombre, fecha, maxRondas, grupal, tipo, numGrupos FROM experimento";
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			while(rs.next()){
+				ex = new Experimento();
+				ex.setId(rs.getInt("id"));
+				ex.setFecha(rs.getDate("fecha"));
+				ex.setGrupal(rs.getBoolean("grupal"));
+				ex.setMaxRondas(rs.getInt("maxRondas"));
+				ex.setNombre(rs.getString("nombre"));
+				ex.setNumGrupos(rs.getInt("numGrupos"));
+				ex.setTipo(getTipoExId(rs.getInt("tipo")));
+				lista.add(ex);
+			}
+			return lista;
+		}catch(Exception e){
+			System.err.println("Error al obtener loss experimentos");
+			e.printStackTrace();
+		}finally{
+			
+		}
+		return new ArrayList<Experimento>();
+	}
+
+	/**
+	 * Metodo para especificar si el usuario esta participando o no
+	 * @param idUsuario
+	 * @param estado
+	 */
+	public void setParticipando(String usuario, boolean estado){
+		try{
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "UPDATE usuario SET participando=? WHERE usuario=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setBoolean(1, estado);
+			pstmt.setString(2, usuario);
+			pstmt.execute();
+		}catch(Exception e){
+			System.err.println("Error al cambiar el estado del usuario");
+		}finally{
+			try{
+				if(pstmt!=null)
+					pstmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(Exception e){
+				System.err.println("Error la cerrar la conexion");
+			}
+		}
+	}
+	
+	public boolean isRoundFinish(int idExperimento, int ronda, int tipoExperimento){
+		try{
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT COUNT(r.id) FROM resultado r, participacion p WHERE r.participacion=p.id AND p.experimento=? AND p.ronda=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idExperimento);
+			pstmt.setInt(2, ronda);
+			ResultSet rs = pstmt.executeQuery();
+			int numResultados = 0;
+			if(rs.next()){
+				numResultados = rs.getInt(1);
+			}
+			sql = "SELECT COUNT(u.id) FROM usuario u, participacion p, resultado r WHERE r.participacion=p.id AND u.id=p.usuario AND p.experimento=? AND p.ronda=? AND u.participando=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idExperimento);
+			pstmt.setInt(2, ronda);
+			pstmt.setBoolean(3, true);
+			rs = pstmt.executeQuery();
+			int numUsuarios = 0;
+			if(rs.next()){
+				numUsuarios = rs.getInt(1);
+			}
+			System.out.println("Resultados: "+numResultados+"\nUsuarios: "+numUsuarios);
+			switch(tipoExperimento){
+			case 1:
+				//Beauty contest, 1 resultado por usuario
+				return numResultados>=numUsuarios;
+			case 2:
+				//Fondo publico privado, 2 resultados por usuario
+				return numResultados>=(2*numUsuarios);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			System.err.println("Error al ver los resultados");
+		}finally{
+			try{
+				if(pstmt!=null)
+					pstmt.close();
+				if(conn!=null)
+					conn.close();
+			}catch(Exception e){
+				System.err.println("Error la cerrar la conexion");
+			}
+		}
+		return false;//cualquier otro caso
+	}
+
+	/**
+	 * Metodo para crear una ronda de un experimento
+	 */
+	private void creaRonda(Ronda r) {
+		try {
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			sql = "INSERT INTO ronda(numRonda, experimento) VALUES (?,?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, r.getNumRonda());
+			pstmt.setInt(2, r.getExperimento().getId());
+			pstmt.execute();
+		} catch (Exception ex) {
+			System.err.println("Error al crear la ronda");
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception ex) {
+				System.err.println("Error al cerrar la conexion");
+			}
+		}
 	}
 
 	private Participacion getParticipanteId(int idParticipante) {
@@ -456,38 +563,6 @@ public class ExperimentApplicationDAO {
 		return new java.sql.Date(new java.util.Date().getTime());
 	}
 
-	/**
-	 * Retorna lista con todos los experimentos
-	 */
-	public List<Experimento> getExperimentos() {
-		try{
-			List<Experimento> lista = new ArrayList<Experimento>();
-			Experimento ex;
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			sql = "SELECT id, nombre, fecha, maxRondas, grupal, tipo, numGrupos FROM experimento";
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-			while(rs.next()){
-				ex = new Experimento();
-				ex.setId(rs.getInt("id"));
-				ex.setFecha(rs.getDate("fecha"));
-				ex.setGrupal(rs.getBoolean("grupal"));
-				ex.setMaxRondas(rs.getInt("maxRondas"));
-				ex.setNombre(rs.getString("nombre"));
-				ex.setNumGrupos(rs.getInt("numGrupos"));
-				ex.setTipo(getTipoExId(rs.getInt("tipo")));
-				lista.add(ex);
-			}
-			return lista;
-		}catch(Exception e){
-			System.err.println("Error al obtener loss experimentos");
-			e.printStackTrace();
-		}finally{
-			
-		}
-		return new ArrayList<Experimento>();
-	}
-
 	private TipoExperimento getTipoExId(int id) {
 		TipoExperimento te = null;
 		try {
@@ -509,30 +584,22 @@ public class ExperimentApplicationDAO {
 		return te;
 	}
 	
-	/**
-	 * Metodo para especificar si el usuario esta participando o no
-	 * @param idUsuario
-	 * @param estado
-	 */
-	public void setParticipando(String usuario, boolean estado){
-		try{
+	private int getIdParticipacionByUser(String username) {
+		int id = -1;
+		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			sql = "UPDATE usuario SET participando=? WHERE usuario=?";
+			sql = "SELECT p.id FROM participacion p, usuario u WHERE p.usuario=u.id AND u.usuario=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setBoolean(1, estado);
-			pstmt.setString(2, usuario);
-			pstmt.execute();
-		}catch(Exception e){
-			System.err.println("Error al cambiar el estado del usuario");
-		}finally{
-			try{
-				if(pstmt!=null)
-					pstmt.close();
-				if(conn!=null)
-					conn.close();
-			}catch(Exception e){
-				System.err.println("Error la cerrar la conexion");
+			pstmt.setString(1, username);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				id =rs.getInt("id");
 			}
+		} catch (Exception ex) {
+			System.err.println("Error al obtener el experimento");
+			ex.printStackTrace();
 		}
+		return id;
 	}
 }

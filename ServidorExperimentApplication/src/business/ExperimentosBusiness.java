@@ -30,6 +30,7 @@ public class ExperimentosBusiness {
 			response.setIdExperimento(dao.creaExperimento(e));
 		}catch(SQLException ex){
 			//No se pudo crear el experimento ya que ya existe uno con ese nombre
+			ex.printStackTrace();
 			return null;
 		}
 		//Creamos los usuarios necesarios y los anadimos al experimento

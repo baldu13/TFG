@@ -4,6 +4,7 @@ import presentation.*;
 
 import java.util.List;
 
+import dao.ExperimentApplicationDAO;
 import model.*;
 
 public class TestMySQL {
@@ -12,26 +13,20 @@ public class TestMySQL {
 		
 		IAdministracion admin = new AdminFacade();
 		IUsuario user = new UserFacade();
+		ExperimentApplicationDAO dao = new ExperimentApplicationDAO();
 		
 		/*
 		//Test crear experimento
-		Experimento e = new Experimento();
-		e.setNombre("Primer experimento");
-		e.setNumGrupos(2);
-		e.setMaxRondas(3);
-		e.setGrupal(true);
 		TipoExperimento te = new TipoExperimento();
 		te.setId(1);
-		e.setTipo(te);
-		CrearExperimentoResponseDTO response = admin.crearExperimento("Primer experimento", te, 6, 3, 4);
+		CrearExperimentoResponseDTO response = admin.crearExperimento("Primero experimento", te, 6, 3, 4);
 		for(Usuario u: response.getUsuarios()){
 			System.out.println("Usuario: "+u.getUsuario()+
 					"\nClave: "+u.getClave()+"\n");
 		}
 		*/
 		
-		
-		
+		/*
 		//Test lista experimentos
 		List<Experimento> lista = admin.getExperimentos();
 		for(Experimento exp: lista){
@@ -39,8 +34,16 @@ public class TestMySQL {
 			System.out.println("Nombre: "+exp.getNombre());
 			System.out.println("Tipo: "+exp.getTipo().getTipo());
 		}
+		*/
 		
-		
+		/*
+		//Test enviar resultado
+		Usuario u = new Usuario();
+		u.setUsuario("ex10u0");
+		u.setClave("VBTSm4");
+		ResultadoBeautyContest r = new ResultadoBeautyContest(u,4);
+		user.enviaResultadoBeautyContest(r);
+		*/
 		/*
 		//Test logearExperimento
 		System.out.println("Tipo experiento: "+user.logeaExperimento("ex1u5", "ebVeB7").getTipo().getTipo());
@@ -58,13 +61,16 @@ public class TestMySQL {
 		r.setParticipante(p);
 		r.setValorNumerico(1.1f);
 		rb.registraResultado(r);
-		
-		Informe i = rb.resultadosExperimento(1);
+		*/
+		/*
+		Informe i = admin.informeExperimento(10);
 		
 		System.out.println("Informe: "+i.getExperimento().getMaxRondas());
 		for(Resultado re: i.getResultados())
 			System.out.println("Resultado: "+re.getValorNumerico());
 		*/
+		user.logeaExperimento("ex10u0", "VBTSm4");
+		System.out.println(user.isRoundFinish(10, 1, 1));
 	}
 
 }

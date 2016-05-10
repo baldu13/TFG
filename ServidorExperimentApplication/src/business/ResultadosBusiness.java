@@ -19,4 +19,8 @@ public class ResultadosBusiness {
 	public Informe resultadosExperimento(int idExperimento){
 		return dao.getResultadosExperimento(idExperimento);
 	}
+	
+	public boolean isRoundFinish(int idExperimento, int ronda, int tipoExperimento){
+		return dao.isRoundFinish(idExperimento, ronda, tipoExperimento);		
+	}
 }

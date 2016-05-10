@@ -2,7 +2,6 @@ package presentation;
 
 import model.*;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import business.*;
@@ -24,6 +23,9 @@ public class AdminFacade implements IAdministracion{
 		e.setNombre(nombre);
 		e.setNumGrupos(tamanoGrupos);
 		e.setTipo(tipo);
+		if(tamanoGrupos!=0){
+			e.setGrupal(true);
+		}
 		return experimentos.creaExperimento(e,numUsuarios);
 	}
 
