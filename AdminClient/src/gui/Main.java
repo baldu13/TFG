@@ -6,10 +6,21 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.GridLayout;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Main extends JFrame {
 
 	private JPanel contentPane;
+	
+	private static Main frame;
+	private static FormExperimento formularioExperimento;
 
 	/**
 	 * Launch the application.
@@ -18,7 +29,8 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main frame = new Main();
+					frame = new Main();
+					formularioExperimento = new FormExperimento(frame);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -35,8 +47,37 @@ public class Main extends JFrame {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.NORTH);
+		
+		JLabel lblBienvenidoALa = new JLabel("Bienvenido a la aplicaci\u00F3n de gesti\u00F3n");
+		lblBienvenidoALa.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		panel.add(lblBienvenidoALa);
+		
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.CENTER);
+		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JButton btnCrearNuevoExperimento = new JButton("Crear Nuevo Experimento");
+		btnCrearNuevoExperimento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnCrearNuevoExperimento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Se muestra el formulario para crear un experimento
+				formularioExperimento.setVisible(true);
+				frame.setVisible(false);
+			}
+		});
+		panel_1.add(btnCrearNuevoExperimento);
+		
+		JButton btnVerExperimentos = new JButton("Ver Experimentos");
+		btnVerExperimentos.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel_1.add(btnVerExperimentos);
+		
+		JButton btnGenerarInforme = new JButton("Generar Informe");
+		btnGenerarInforme.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel_1.add(btnGenerarInforme);
 	}
-
 }
