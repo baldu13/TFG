@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import utilities.ServerConnection;
+
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -17,10 +20,12 @@ import java.awt.event.ActionEvent;
 
 public class Main extends JFrame {
 
+	private JFrame actual = this;
 	private JPanel contentPane;
 	
 	private static Main frame;
 	private static FormExperimento formularioExperimento;
+	private static ListExperimentos listaExperimentos;
 
 	/**
 	 * Launch the application.
@@ -62,7 +67,7 @@ public class Main extends JFrame {
 		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JButton btnCrearNuevoExperimento = new JButton("Crear Nuevo Experimento");
-		btnCrearNuevoExperimento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnCrearNuevoExperimento.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnCrearNuevoExperimento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//Se muestra el formulario para crear un experimento
@@ -73,11 +78,14 @@ public class Main extends JFrame {
 		panel_1.add(btnCrearNuevoExperimento);
 		
 		JButton btnVerExperimentos = new JButton("Ver Experimentos");
-		btnVerExperimentos.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnVerExperimentos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO
+				listaExperimentos = new ListExperimentos(ServerConnection.getExperimentos(),actual);
+				setVisible(false);
+			}
+		});
+		btnVerExperimentos.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel_1.add(btnVerExperimentos);
-		
-		JButton btnGenerarInforme = new JButton("Generar Informe");
-		btnGenerarInforme.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel_1.add(btnGenerarInforme);
 	}
 }

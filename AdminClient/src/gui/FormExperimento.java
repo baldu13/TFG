@@ -6,6 +6,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import model.*;
+import utilities.ServerConnection;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
@@ -18,10 +22,10 @@ import java.awt.event.ActionEvent;
 public class FormExperimento extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField textFieldNombre;
+	private JTextField textFieldUsuarios;
+	private JTextField textFieldRondas;
+	private JTextField textFieldGrupos;
 	
 	private JFrame main;
 
@@ -62,37 +66,59 @@ public class FormExperimento extends JFrame {
 		lblTipoDeExperimento.setBounds(46, 182, 177, 22);
 		contentPane.add(lblTipoDeExperimento);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textField.setBounds(221, 49, 177, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		textFieldNombre = new JTextField();
+		textFieldNombre.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldNombre.setBounds(221, 49, 177, 20);
+		contentPane.add(textFieldNombre);
+		textFieldNombre.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textField_1.setBounds(221, 82, 31, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		textFieldUsuarios = new JTextField();
+		textFieldUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldUsuarios.setBounds(221, 82, 31, 20);
+		contentPane.add(textFieldUsuarios);
+		textFieldUsuarios.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textField_2.setBounds(221, 117, 31, 20);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
+		textFieldRondas = new JTextField();
+		textFieldRondas.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldRondas.setBounds(221, 117, 31, 20);
+		contentPane.add(textFieldRondas);
+		textFieldRondas.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		textField_3.setBounds(221, 152, 31, 20);
-		contentPane.add(textField_3);
-		textField_3.setColumns(10);
+		textFieldGrupos = new JTextField();
+		textFieldGrupos.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldGrupos.setBounds(221, 152, 31, 20);
+		contentPane.add(textFieldGrupos);
+		textFieldGrupos.setColumns(10);
+		
+		JComboBox<String> comboBoxTipo = new JComboBox<String>();
+		comboBoxTipo.setBounds(221, 182, 187, 20);
+		comboBoxTipo.addItem("Beauty Contest");
+		comboBoxTipo.addItem("Fondo público y privado");
+		contentPane.add(comboBoxTipo);
+		
+		JLabel lblTitulo = new JLabel("Introduzca los datos para la creaci\u00F3n del experimento:");
+		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTitulo.setBounds(22, 11, 389, 24);
+		contentPane.add(lblTitulo);
 		
 		JButton btnCrear = new JButton("Crear");
 		btnCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO: crear el experimento
-				main.setVisible(true);
-				setVisible(false);
-				new MensajeUsuario("Experimento creado correctamente");
+				TipoExperimento te = new TipoExperimento();
+				if("Beauty Contest".equals((String)comboBoxTipo.getSelectedItem())){
+					te.setId(1);
+					te.setTipo((String)comboBoxTipo.getSelectedItem());
+				}
+				CrearExperimentoResponseDTO response = ServerConnection.crearExperimento(textFieldNombre.getText(), te, Integer.parseInt(textFieldUsuarios.getText()), Integer.parseInt(textFieldGrupos.getText()), Integer.parseInt(textFieldRondas.getText()));
+				if(response!=null){
+					setVisible(false);
+					new SaveUsuarios(main,response);
+				}else{
+					main.setVisible(true);
+					setVisible(false);
+					new MensajeUsuario("Se produjo un error al intentar crear el experimento.\nPor favor, revisa que la información es correcta.");
+				}
 			}
 		});
 		btnCrear.setBounds(322, 227, 89, 23);
@@ -108,16 +134,5 @@ public class FormExperimento extends JFrame {
 		});
 		btnCancelar.setBounds(221, 227, 89, 23);
 		contentPane.add(btnCancelar);
-		
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setBounds(221, 182, 187, 20);
-		comboBox.addItem("Beauty Contest");
-		comboBox.addItem("Fondo público y privado");
-		contentPane.add(comboBox);
-		
-		JLabel lblTitulo = new JLabel("Introduzca los datos para la creaci\u00F3n del experimento:");
-		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTitulo.setBounds(22, 11, 389, 14);
-		contentPane.add(lblTitulo);
 	}
 }

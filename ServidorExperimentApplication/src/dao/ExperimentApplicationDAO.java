@@ -564,7 +564,7 @@ public class ExperimentApplicationDAO {
 		return new java.sql.Date(new java.util.Date().getTime());
 	}
 
-	private TipoExperimento getTipoExId(int id) {
+	public TipoExperimento getTipoExId(int id) {
 		TipoExperimento te = null;
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);

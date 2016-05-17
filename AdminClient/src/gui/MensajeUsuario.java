@@ -21,7 +21,7 @@ public class MensajeUsuario extends JFrame {
 	 */
 	public MensajeUsuario(String mensaje) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 468, 118);
+		setBounds(100, 100, 468, 134);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -34,12 +34,12 @@ public class MensajeUsuario extends JFrame {
 				dispose();
 			}
 		});
-		btnOk.setBounds(353, 45, 89, 23);
+		btnOk.setBounds(353, 61, 89, 23);
 		contentPane.add(btnOk);
 		
 		JLabel lblNewLabel = new JLabel(mensaje);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel.setBounds(10, 18, 398, 23);
+		lblNewLabel.setBounds(10, 11, 398, 50);
 		contentPane.add(lblNewLabel);
 		setVisible(true);
 	}
