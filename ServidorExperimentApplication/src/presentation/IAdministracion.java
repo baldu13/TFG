@@ -11,4 +11,6 @@ public interface IAdministracion {
 	Informe informeExperimento(int idExperimento);
 	
 	List<Experimento> getExperimentos();
+	
+	List<Usuario> getUsuariosExperimento(int idExperimento);
 }

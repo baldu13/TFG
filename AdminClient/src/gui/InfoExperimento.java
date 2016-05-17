@@ -1,17 +1,18 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import model.*;
+import utilities.ServerConnection;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class InfoExperimento extends JFrame {
@@ -71,11 +72,19 @@ public class InfoExperimento extends JFrame {
 				dispose();
 			}
 		});
-		btnAtrs.setBounds(62, 227, 89, 23);
+		btnAtrs.setBounds(25, 227, 89, 23);
 		contentPane.add(btnAtrs);
 		
 		JButton btnGenerarInforme = new JButton("Generar informe");
-		btnGenerarInforme.setBounds(296, 227, 111, 23);
+		btnGenerarInforme.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Informe i = ServerConnection.geInformeExperimento(e.getId());
+				i.setExperimento(e);
+				new GenerateInforme(previous, i);
+				dispose();
+			}
+		});
+		btnGenerarInforme.setBounds(276, 227, 131, 23);
 		contentPane.add(btnGenerarInforme);
 		
 		JLabel lblId_1 = new JLabel(String.valueOf(e.getId()));
@@ -87,28 +96,34 @@ public class InfoExperimento extends JFrame {
 		contentPane.add(lblNombre_1);
 		
 		JLabel lblTipo_1 = new JLabel(e.getTipo().getTipo());
-		lblTipo_1.setBounds(88, 99, 293, 14);
+		lblTipo_1.setBounds(88, 98, 293, 14);
 		contentPane.add(lblTipo_1);
 		
 		JLabel lblRondas = new JLabel(String.valueOf(e.getMaxRondas()));
-		lblRondas.setBounds(126, 124, 46, 14);
+		lblRondas.setBounds(128, 124, 46, 14);
 		contentPane.add(lblRondas);
 		
 		JLabel lblTamgrupos = new JLabel(String.valueOf(e.getNumGrupos()));
-		lblTamgrupos.setBounds(185, 149, 46, 14);
+		lblTamgrupos.setBounds(193, 149, 46, 14);
 		contentPane.add(lblTamgrupos);
 		
-		JLabel lblFecha = new JLabel(e.getFecha().toString());
-		lblFecha.setBounds(169, 174, 62, 14);
+		SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
+		JLabel lblFecha = new JLabel(formatterDate.format(e.getFecha()));
+		lblFecha.setBounds(169, 174, 200, 14);
 		contentPane.add(lblFecha);
 		
 		JButton btnGenerarUsuarios = new JButton("Generar usuarios");
 		btnGenerarUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ex) {
-				//TODO: get lista usuarios
+				List<Usuario> listaUsuarios = ServerConnection.getListaUsuariosExperimento(e.getId());
+				CrearExperimentoResponseDTO print = new CrearExperimentoResponseDTO();
+				print.setIdExperimento(e.getId());
+				print.setUsuarios(listaUsuarios);
+				new SaveUsuarios(previous,print);
+				dispose();
 			}
 		});
-		btnGenerarUsuarios.setBounds(161, 227, 125, 23);
+		btnGenerarUsuarios.setBounds(124, 227, 142, 23);
 		contentPane.add(btnGenerarUsuarios);
 		
 		setVisible(true);

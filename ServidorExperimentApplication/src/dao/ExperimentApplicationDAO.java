@@ -603,4 +603,26 @@ public class ExperimentApplicationDAO {
 		}
 		return id;
 	}
+	
+	public List<Usuario> getUsuariosExperimento(int idExperimento){
+		List<Usuario> lista = new LinkedList<Usuario>();
+		try {
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT u.usuario, u.clave FROM usuario u, participacion p WHERE p.usuario=u.id AND p.experimento=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idExperimento);
+			ResultSet rs = pstmt.executeQuery();
+			Usuario u;
+			while (rs.next()) {
+				u = new Usuario();
+				u.setUsuario(rs.getString("usuario"));
+				u.setClave(rs.getString("clave"));
+				lista.add(u);
+			}
+		} catch (Exception ex){
+			System.err.println("Error al obtener el experimento");
+			ex.printStackTrace();
+		}
+		return lista;
+	}
 }

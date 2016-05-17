@@ -133,4 +133,8 @@ public class ExperimentosBusiness {
 	public List<Experimento> getExperimentos() {
 		return dao.getExperimentos();
 	}	
+	
+	public List<Usuario> getUsuariosExperimento(int id){
+		return dao.getUsuariosExperimento(id);
+	}
 }

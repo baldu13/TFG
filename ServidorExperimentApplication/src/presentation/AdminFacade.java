@@ -38,4 +38,9 @@ public class AdminFacade implements IAdministracion{
 	public List<Experimento> getExperimentos(){
 		return experimentos.getExperimentos();
 	}
+	
+	@Override
+	public List<Usuario> getUsuariosExperimento(int idExperimento){
+		return experimentos.getUsuariosExperimento(idExperimento);
+	}
 }

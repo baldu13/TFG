@@ -96,4 +96,54 @@ public class ServerConnection {
 		}
 		return lista;
 	}
+	
+	public static List<Usuario> getListaUsuariosExperimento(int idExperimento){
+		List<Usuario> listaUsuarios = new LinkedList<Usuario>();
+		try{
+			Socket clientSocket = new Socket(SERVER_IP, SERVER_PORT);   
+			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());   
+			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());   
+			
+			//Enviamos la informacion
+			outToServer.writeInt(3); //Codigo 3 = getUsuariosExperimento
+			outToServer.writeInt(idExperimento);
+			//Leemos la respuesta
+			int numUsuarios = inFromServer.readInt();
+			Usuario u;
+			for(int i=0;i<numUsuarios;i++){
+				u = new Usuario();
+				u.setUsuario(inFromServer.readLine());
+				u.setClave(inFromServer.readLine());
+				listaUsuarios.add(u);
+			}
+			//Cerramos la conexion
+			clientSocket.close();
+		}catch(Exception e){
+			e.printStackTrace();
+			System.err.println("Error al conectar con el servidor");
+		}
+		return listaUsuarios;
+	}
+	
+	public static Informe geInformeExperimento(int idExperimento){
+		Informe i = new Informe();
+		try{
+			Socket clientSocket = new Socket(SERVER_IP, SERVER_PORT);   
+			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());   
+			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());   
+			
+			//Enviamos la informacion
+			outToServer.writeInt(4); //Codigo 4 = getInforme
+			outToServer.writeInt(idExperimento);
+			//Leemos la respuesta
+			//TODO
+			//Cerramos la conexion
+			clientSocket.close();
+		}catch(Exception e){
+			e.printStackTrace();
+			System.err.println("Error al conectar con el servidor");
+		}
+		
+		return i;
+	}
 }

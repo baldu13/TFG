@@ -58,10 +58,30 @@ public class TCPInterface {
 						outToClient.writeBytes(u.getClave() + "\n");
 					}
 					break;
+				case 3: //Lista de usuarios de experimento
+					//Leemos idExperimento
+					int idExperimento = inFromClient.readInt();
+					//Procesamos
+					List<Usuario> listaUsuarios = admin.getUsuariosExperimento(idExperimento);
+					//Retornamos
+					outToClient.writeInt(listaUsuarios.size());
+					for(Usuario u: listaUsuarios){
+						outToClient.writeBytes(u.getUsuario()+"\n");
+						outToClient.writeBytes(u.getClave()+"\n");
+					}
+					break;
+				case 4: //Informe de experimento
+					//Leemos idExperimento
+					int idExInforme = inFromClient.readInt();
+					//Procesamos
+					Informe i = admin.informeExperimento(idExInforme);
+					//Retornamos informacion
+					outToClient.writeInt(i.getResultados().size());
+					//TODO
 				default:
 					// No hacer nada, peticion erronea
 				}
-			} catch (Exception e) {} //Peticion erronea
+			} catch (Exception e) {} //Peticion erronea, ignorar
 		}
 	}
 }
