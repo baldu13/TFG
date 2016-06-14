@@ -78,7 +78,8 @@ public class InfoExperimento extends JFrame {
 		JButton btnGenerarInforme = new JButton("Generar informe");
 		btnGenerarInforme.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Informe i = ServerConnection.geInformeExperimento(e.getId());
+				Informe i = ServerConnection.informeExperimento(e.getId());
+				System.out.println("Informe: "+i.getResultados().size());
 				i.setExperimento(e);
 				new GenerateInforme(previous, i);
 				dispose();

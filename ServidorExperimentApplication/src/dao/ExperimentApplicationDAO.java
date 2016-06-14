@@ -472,6 +472,7 @@ public class ExperimentApplicationDAO {
 			if(rs.next()){
 				p = new Participacion();
 				p.setId(idParticipante);
+				p.setUsuario(getUsuarioById(rs.getInt("usuario")));
 				Ronda r = new Ronda();
 				r.setExperimento(getExperimentoId(rs.getInt("experimento")));
 				r.setNumRonda(rs.getInt("ronda"));
@@ -481,6 +482,37 @@ public class ExperimentApplicationDAO {
 		}catch(Exception e){
 			System.err.println("Error al obtener la participacion");
 			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private Usuario getUsuarioById(int int1) {
+		try{
+			Usuario u = null;
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			sql = "SELECT usuario FROM usuario WHERE id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, int1);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()){
+				u = new Usuario();
+				u.setUsuario(rs.getString("usuario"));
+			}
+			return u;
+		}catch(Exception e){
+			System.err.println("Error al obtener el usuario");
+			e.printStackTrace();
+		}finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception ex) {
+				System.err.println("Error al cerrar la conexion");
+			}
 		}
 		return null;
 	}

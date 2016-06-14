@@ -75,9 +75,18 @@ public class TCPInterface {
 					int idExInforme = inFromClient.readInt();
 					//Procesamos
 					Informe i = admin.informeExperimento(idExInforme);
+					System.out.println(i.getResultados().size());
 					//Retornamos informacion
 					outToClient.writeInt(i.getResultados().size());
-					//TODO
+					for(Resultado r: i.getResultados()){
+						System.out.println("Usuario: "+r.getParticipante().getUsuario());
+						outToClient.writeInt(r.getParticipante().getNumGrupo());
+						outToClient.writeInt(r.getParticipante().getRonda().getNumRonda());
+						outToClient.writeBytes(r.getParticipante().getUsuario().getUsuario()+"\n");
+						outToClient.writeBytes(r.getTipo().getEtiqueta()+"\n");
+						outToClient.writeBytes(r.getValorTexto()+"\n");
+						outToClient.writeFloat(r.getValorNumerico());
+					}
 				default:
 					// No hacer nada, peticion erronea
 				}

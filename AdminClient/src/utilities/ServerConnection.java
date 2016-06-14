@@ -48,8 +48,47 @@ public class ServerConnection {
 	}
 	
 	public static Informe informeExperimento(int idExperimento){
-		//TODO
-		return null;
+		Informe i = new Informe();
+		List<Resultado> listResultados = new LinkedList<Resultado>();
+		Resultado r;
+		try{
+			Socket clientSocket = new Socket(SERVER_IP, SERVER_PORT);   
+			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());   
+			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());   
+			
+			//Enviamos la informacion
+			outToServer.writeInt(4); //Codigo 4 = getInforme
+			outToServer.writeInt(idExperimento);
+			//Leemos la respuesta
+			int numResultados = inFromServer.readInt();
+			for(int ind=0;ind<numResultados;ind++){
+				r = new Resultado();
+				Participacion p = new Participacion();
+				p.setNumGrupo(inFromServer.readInt());
+				Ronda rda = new Ronda();
+				rda.setNumRonda(inFromServer.readInt());
+				p.setRonda(rda);
+				Usuario usr = new Usuario();
+				usr.setUsuario(inFromServer.readLine());
+				p.setUsuario(usr);
+				System.out.println("Usuario "+p.getUsuario().getUsuario());
+				r.setParticipante(p);
+				TipoResultado tr = new TipoResultado();
+				tr.setEtiqueta(inFromServer.readLine());
+				r.setTipo(tr);
+				r.setValorTexto(inFromServer.readLine());
+				r.setValorNumerico(inFromServer.readFloat());
+				listResultados.add(r);
+				System.out.println("Valor: "+r.getValorNumerico());
+			}
+			i.setResultados(listResultados);
+			//Cerramos la conexion
+			clientSocket.close();
+		}catch(Exception e){
+			e.printStackTrace();
+			System.err.println("Error al conectar con el servidor");
+		}
+		return i;
 	}
 	
 	public static List<Experimento> getExperimentos(){
@@ -123,27 +162,5 @@ public class ServerConnection {
 			System.err.println("Error al conectar con el servidor");
 		}
 		return listaUsuarios;
-	}
-	
-	public static Informe geInformeExperimento(int idExperimento){
-		Informe i = new Informe();
-		try{
-			Socket clientSocket = new Socket(SERVER_IP, SERVER_PORT);   
-			DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());   
-			DataInputStream inFromServer = new DataInputStream(clientSocket.getInputStream());   
-			
-			//Enviamos la informacion
-			outToServer.writeInt(4); //Codigo 4 = getInforme
-			outToServer.writeInt(idExperimento);
-			//Leemos la respuesta
-			//TODO
-			//Cerramos la conexion
-			clientSocket.close();
-		}catch(Exception e){
-			e.printStackTrace();
-			System.err.println("Error al conectar con el servidor");
-		}
-		
-		return i;
 	}
 }
