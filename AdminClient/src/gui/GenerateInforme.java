@@ -74,9 +74,23 @@ public class GenerateInforme extends JFrame {
 			writer.println("Ronda: "+r.getParticipante().getRonda().getNumRonda());
 			writer.println("Valor seleccionado: "+r.getValorNumerico());
 			total += r.getValorNumerico();
+			writer.println();
 		}
+		writer.println();
 		total /= resultados.size();
 		total *= 0.75;
 		writer.println("3/4 de la media: "+total);
+
+		Resultado winner = resultados.get(0);
+		float diferencia;
+		float distancia;
+		for(Resultado r: resultados){
+			diferencia = Math.abs(total-winner.getValorNumerico());
+			distancia = Math.abs(total-r.getValorNumerico());
+			if(distancia<diferencia){
+				winner = r; //Está mas cerca del resultado
+			}
+		}
+		writer.println("Ganador "+winner.getParticipante().getUsuario().getUsuario()+" con el número "+winner.getValorNumerico());
 	}
 }
