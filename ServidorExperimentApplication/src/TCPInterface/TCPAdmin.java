@@ -8,12 +8,13 @@ import dao.ExperimentApplicationDAO;
 import model.*;
 import presentation.*;
 
-public class TCPInterface {
+public class TCPAdmin {
 
 	private static final int SERVER_PORT = 12002;
 	private static final IAdministracion admin = new AdminFacade();
 
 	public static void main(String argv[]) throws Exception {
+		System.out.println("Servidor de adminstracion INICIADO");
 		ServerSocket welcomeSocket = new ServerSocket(SERVER_PORT);
 		while (true) {
 			try {
