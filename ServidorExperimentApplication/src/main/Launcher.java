@@ -18,6 +18,7 @@ public class Launcher {
 				}
 			}
 		}.start();
+		
 		new Thread(){
 			@Override
 			public void run(){

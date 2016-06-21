@@ -151,7 +151,6 @@ public class ExperimentApplicationDAO {
 
 			int idUsuario = -1;
 			if (!rs.next()) {
-				System.out.println("Usuario no encontrado");
 				return e;
 			} else {
 				idUsuario = rs.getInt("id");

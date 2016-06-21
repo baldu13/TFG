@@ -22,7 +22,7 @@ public class TCPAdmin {
 				DataInputStream inFromClient = new DataInputStream(connectionSocket.getInputStream());
 				DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 				int codOperacion = inFromClient.readInt();
-				System.out.println("Recibida peticion. Codigo de operacion " + codOperacion + ".");
+				System.out.println("ADMIN Recibida peticion. Codigo de operacion " + codOperacion + ".");
 				switch (codOperacion) {
 				case 1: // getExperimentos
 					List<Experimento> lista = admin.getExperimentos();

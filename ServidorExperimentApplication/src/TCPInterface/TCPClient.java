@@ -31,7 +31,7 @@ public class TCPClient {
 	        is.read(codOperacion, 0, 4);
 	        int op = bytesToInteger(codOperacion);
 	
-	        System.out.println("Codigo de operacion: " + op);
+	        System.out.println("CLIENTE Recibida peticion. Codigo de operacion " + op);
 	        
 	        switch(op){
 	        case 1: //logeaExperimento
@@ -68,19 +68,6 @@ public class TCPClient {
 	        }
 	        socket.close();
         }
-        /*
-        // Sending
-        String toSend = "Echo: " + lenBytes;
-        byte[] toSendBytes = toSend.getBytes();
-        int toSendLen = toSendBytes.length;
-        byte[] toSendLenBytes = new byte[4];
-        toSendLenBytes[0] = (byte)(toSendLen & 0xff);
-        toSendLenBytes[1] = (byte)((toSendLen >> 8) & 0xff);
-        toSendLenBytes[2] = (byte)((toSendLen >> 16) & 0xff);
-        toSendLenBytes[3] = (byte)((toSendLen >> 24) & 0xff);
-        os.write(toSendLenBytes);
-        os.write(toSendBytes);
-		*/
     }
     
     public static int bytesToInteger(byte[] bytes){
