@@ -18,8 +18,8 @@ public class SaveUsuarios extends JFrame {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fileChooser.showSaveDialog(null);
-		
-		generateUsuarios(response, fileChooser.getSelectedFile());
+		if(fileChooser.getSelectedFile()!=null)
+			generateUsuarios(response, fileChooser.getSelectedFile());
 		main.setVisible(true);
 		dispose();
 	}

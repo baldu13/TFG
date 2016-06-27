@@ -80,7 +80,6 @@ public class Main extends JFrame {
 		JButton btnVerExperimentos = new JButton("Ver Experimentos");
 		btnVerExperimentos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO
 				listaExperimentos = new ListExperimentos(ServerConnection.getExperimentos(),actual);
 				setVisible(false);
 			}

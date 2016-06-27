@@ -1,8 +1,5 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -13,7 +10,6 @@ import utilities.ServerConnection;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.JList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
@@ -26,14 +22,11 @@ public class FormExperimento extends JFrame {
 	private JTextField textFieldUsuarios;
 	private JTextField textFieldRondas;
 	private JTextField textFieldGrupos;
-	
-	private JFrame main;
 
 	/**
 	 * Create the frame.
 	 */
 	public FormExperimento(JFrame main) {
-		this.main = main;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -104,10 +97,13 @@ public class FormExperimento extends JFrame {
 		JButton btnCrear = new JButton("Crear");
 		btnCrear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: crear el experimento
 				TipoExperimento te = new TipoExperimento();
 				if("Beauty Contest".equals((String)comboBoxTipo.getSelectedItem())){
 					te.setId(1);
+					te.setTipo((String)comboBoxTipo.getSelectedItem());
+				}
+				if("Fondo público y privado".equals((String)comboBoxTipo.getSelectedItem())){
+					te.setId(2);
 					te.setTipo((String)comboBoxTipo.getSelectedItem());
 				}
 				CrearExperimentoResponseDTO response = ServerConnection.crearExperimento(textFieldNombre.getText(), te, Integer.parseInt(textFieldUsuarios.getText()), Integer.parseInt(textFieldGrupos.getText()), Integer.parseInt(textFieldRondas.getText()));
@@ -115,9 +111,9 @@ public class FormExperimento extends JFrame {
 					setVisible(false);
 					new SaveUsuarios(main,response);
 				}else{
+					new MensajeUsuario("Se produjo un error al intentar crear el experimento.\nPor favor, revisa que la información es correcta.");
 					main.setVisible(true);
 					setVisible(false);
-					new MensajeUsuario("Se produjo un error al intentar crear el experimento.\nPor favor, revisa que la información es correcta.");
 				}
 			}
 		});

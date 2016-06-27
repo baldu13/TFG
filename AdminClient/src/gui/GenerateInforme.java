@@ -7,6 +7,7 @@ import model.*;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GenerateInforme extends JFrame {
@@ -18,8 +19,8 @@ public class GenerateInforme extends JFrame {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		fileChooser.showSaveDialog(null);
-		
-		generateInforme(informe, fileChooser.getSelectedFile());
+		if(fileChooser.getSelectedFile()!=null)
+			generateInforme(informe, fileChooser.getSelectedFile());
 		main.setVisible(true);
 		dispose();
 	}
@@ -29,7 +30,7 @@ public class GenerateInforme extends JFrame {
 			String path = f+"\\informeExperimento"+toPrint.getExperimento().getId()+".txt";
 			File fichero = new File(path);
 			PrintWriter writer = new PrintWriter(fichero,"UTF-8");
-			//TODO: Escribir el fichero
+			//TODO: Falta clasificar por rondas
 			writer.println("INFORME DEL EXPERIMENTO "+toPrint.getExperimento().getId());
 			writer.println("---------------------------------------------------------");
 			writer.println("Tipo: "+toPrint.getExperimento().getTipo().getTipo());
@@ -38,12 +39,19 @@ public class GenerateInforme extends JFrame {
 			writer.println("Numero de grupos: "+toPrint.getExperimento().getNumGrupos());
 			writer.println("\n-------------------------------------------------------\n");
 			writer.println("RESULTADOS\n");
+			List<Resultado>[] resultadosRonda = resultadosPorRonda(toPrint.getResultados(), toPrint.getExperimento().getMaxRondas());
 			switch(toPrint.getExperimento().getTipo().getId()){
 			case 1:
-				printResultadosBeautyContest(writer,toPrint.getResultados());
+				for(int i=0;i<resultadosRonda.length;i++){
+					writer.println("RONDA "+(i+1));
+					printResultadosBeautyContest(writer,resultadosRonda[i]);
+				}
 				break;
 			case 2:
-				printResultadosFondoPublicoPrivado(writer,toPrint.getResultados());
+				for(int i=0;i<resultadosRonda.length;i++){
+					writer.println("RONDA "+(i+1));
+					printResultadosFondoPublicoPrivado(writer,resultadosRonda[i]);
+				}
 				break;
 			default:
 				break;
@@ -60,7 +68,6 @@ public class GenerateInforme extends JFrame {
 		for(Resultado r: resultados){
 			writer.println("Usuario: "+r.getParticipante().getUsuario().getUsuario());
 			writer.println("Grupo: "+r.getParticipante().getNumGrupo());
-			writer.println("Ronda: "+r.getParticipante().getRonda());
 			writer.println("Fondo destinado: "+r.getTipo().getEtiqueta());
 			writer.println("Valor seleccionado: "+r.getValorNumerico());
 		}
@@ -71,7 +78,6 @@ public class GenerateInforme extends JFrame {
 		for(Resultado r: resultados){
 			writer.println("Usuario: "+r.getParticipante().getUsuario().getUsuario());
 			writer.println("Grupo: "+r.getParticipante().getNumGrupo());
-			writer.println("Ronda: "+r.getParticipante().getRonda().getNumRonda());
 			writer.println("Valor seleccionado: "+r.getValorNumerico());
 			total += r.getValorNumerico();
 			writer.println();
@@ -92,5 +98,24 @@ public class GenerateInforme extends JFrame {
 			}
 		}
 		writer.println("Ganador "+winner.getParticipante().getUsuario().getUsuario()+" con el número "+winner.getValorNumerico());
+	}
+	
+	private List<Resultado>[] resultadosPorRonda(List<Resultado> resuls, int maxRonda){
+		System.out.println("RESULTADOS: "+resuls.size());
+		if(maxRonda!=0){
+			List<Resultado>[] resultados = new List[maxRonda];
+			
+			//Inicializacion
+			for(int i=0;i<resultados.length;i++){
+				resultados[i] = new ArrayList<Resultado>();
+			}
+			
+			for(Resultado r: resuls){
+				resultados[r.getParticipante().getRonda().getNumRonda()-1].add(r);
+			}
+		
+			return resultados;
+		}
+		return new ArrayList[0];
 	}
 }

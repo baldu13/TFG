@@ -71,7 +71,6 @@ public class ServerConnection {
 				Usuario usr = new Usuario();
 				usr.setUsuario(inFromServer.readLine());
 				p.setUsuario(usr);
-				System.out.println("Usuario "+p.getUsuario().getUsuario());
 				r.setParticipante(p);
 				TipoResultado tr = new TipoResultado();
 				tr.setEtiqueta(inFromServer.readLine());
@@ -79,7 +78,6 @@ public class ServerConnection {
 				r.setValorTexto(inFromServer.readLine());
 				r.setValorNumerico(inFromServer.readFloat());
 				listResultados.add(r);
-				System.out.println("Valor: "+r.getValorNumerico());
 			}
 			i.setResultados(listResultados);
 			//Cerramos la conexion
