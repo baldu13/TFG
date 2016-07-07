@@ -4,7 +4,7 @@ public class ResultadoBeautyContest {
 
 	//Atributos
 	private Usuario usuario;
-	private int numElegido;
+	private float numElegido;
 	
 	public ResultadoBeautyContest(){}
 	
@@ -21,11 +21,11 @@ public class ResultadoBeautyContest {
 		this.usuario = usuario;
 	}
 
-	public int getNumElegido() {
+	public float getNumElegido() {
 		return numElegido;
 	}
 
-	public void setNumElegido(int numElegido) {
+	public void setNumElegido(float numElegido) {
 		this.numElegido = numElegido;
 	}
 	

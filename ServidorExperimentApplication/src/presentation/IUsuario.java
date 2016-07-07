@@ -4,9 +4,9 @@ import model.*;
 
 public interface IUsuario {
 
-	void enviaResultadoFondoPublico(ResultadoFondoPublico r);
+	void enviaResultadoFondoPublico(ResultadoFondoPublico r, int ronda);
 	
-	void enviaResultadoBeautyContest(ResultadoBeautyContest r);
+	void enviaResultadoBeautyContest(ResultadoBeautyContest r, int ronda);
 	
 	boolean isRoundFinish(int idExperimento, int ronda, int idTipoExperimento);
 	

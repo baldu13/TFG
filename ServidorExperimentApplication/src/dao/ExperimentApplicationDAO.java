@@ -169,14 +169,15 @@ public class ExperimentApplicationDAO {
 				idExperimento = rs.getInt("experimento");
 			}
 
-			// Buscamos los datros de ese experimento
-			sql = "SELECT id, tipo FROM experimento WHERE id=?";
+			// Buscamos los datos de ese experimento
+			sql = "SELECT id, tipo, maxRondas FROM experimento WHERE id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, idExperimento);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
 				e = new Experimento();
+				e.setMaxRondas(rs.getInt("maxRondas"));
 				e.setId(rs.getInt("id"));
 				int tipo = rs.getInt("tipo");
 				sql = "SELECT tipo FROM tipoexperimento WHERE id=?";
@@ -212,7 +213,7 @@ public class ExperimentApplicationDAO {
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			int idUsuario = getIdParticipacionByUser(r.getParticipante().getUsuario().getUsuario());
+			int idUsuario = getIdParticipacionByUser(r.getParticipante().getUsuario().getUsuario(),r.getParticipante().getRonda().getNumRonda());
 			sql = "INSERT INTO resultado(tipoResultado, participacion, valorTexto, valorNumerico) VALUES (?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, r.getTipo().getId());
@@ -236,7 +237,27 @@ public class ExperimentApplicationDAO {
 			}
 		}
 	}
-
+	
+	private int participacionesExperimento(int idExperimento) {
+		try {
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+			sql = "SELECT COUNT(u.id) as num FROM usuario u, participacion p WHERE u.id=p.usuario AND p.experimento=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idExperimento);
+			ResultSet rs = pstmt.executeQuery();
+			if(rs.next()){
+				return rs.getInt("num");
+			}else{
+				return 0;
+			}
+		} catch (Exception e) {
+			System.err.println("Error al consultar el numero de participantes");
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
 	/**
 	 * Metodo que registra un usuario en una ronda-experimento-grupo
 	 * 
@@ -276,24 +297,23 @@ public class ExperimentApplicationDAO {
 		Informe informe = new Informe();
 		informe.setExperimento(getExperimentoId(idExperimento));
 		List<Resultado> resultados = new LinkedList<Resultado>();
-		Resultado r;
 		
 		try {
 			//Obtenemos el id de las participaciones en el experimento
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			sql = "SELECT id FROM participacion WHERE experimento=?";
+			sql = "SELECT id FROM participacion WHERE experimento=? ORDER BY id";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, idExperimento);
 			ResultSet rs = pstmt.executeQuery();
 			
-			sql = "SELECT id, tipoResultado, participacion, valorTexto, valorNumerico FROM resultado WHERE participacion=?";
 			while(rs.next()){
+				sql = "SELECT id, tipoResultado, participacion, valorTexto, valorNumerico FROM resultado WHERE participacion=?";
 				int idParticipacion = rs.getInt("id");
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, idParticipacion);
 				ResultSet rs2 = pstmt.executeQuery();
 				while(rs2.next()){
-					r = new Resultado();
+					Resultado r = new Resultado();
 					r.setId(rs2.getInt("id"));
 					r.setValorNumerico(rs2.getFloat("valorNumerico"));
 					r.setValorTexto(rs2.getString("valorTexto"));
@@ -345,6 +365,7 @@ public class ExperimentApplicationDAO {
 				ex.setNombre(rs.getString("nombre"));
 				ex.setNumGrupos(rs.getInt("numGrupos"));
 				ex.setTipo(getTipoExId(rs.getInt("tipo")));
+				ex.setNumParticipantes(participacionesExperimento(rs.getInt("id"))/ex.getMaxRondas());
 				lista.add(ex);
 			}
 			return lista;
@@ -520,14 +541,14 @@ public class ExperimentApplicationDAO {
 		try{
 			TipoResultado tr = null;
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			sql = "SELECT tipo FROM tipoexperimento WHERE id=?";
+			sql = "SELECT etiqueta FROM tiporesultado WHERE id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, idTipo);
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()){
 				tr = new TipoResultado();
 				tr.setId(idTipo);
-				tr.setEtiqueta(rs.getString("tipo"));
+				tr.setEtiqueta(rs.getString("etiqueta"));
 			}
 			return tr;
 		}catch(Exception e){
@@ -578,6 +599,7 @@ public class ExperimentApplicationDAO {
 					te.setTipo(rs.getString("tipo"));
 					e.setTipo(te);
 				}
+				e.setNumParticipantes(participacionesExperimento((e.getId()/e.getMaxRondas())));
 			}
 		} catch (Exception ex) {
 			System.err.println("Error al obtener el experimento");
@@ -616,20 +638,21 @@ public class ExperimentApplicationDAO {
 		return te;
 	}
 	
-	private int getIdParticipacionByUser(String username) {
+	private int getIdParticipacionByUser(String username, int ronda) {
 		int id = -1;
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			sql = "SELECT p.id FROM participacion p, usuario u WHERE p.usuario=u.id AND u.usuario=?";
+			sql = "SELECT p.id FROM participacion p, usuario u WHERE p.usuario=u.id AND u.usuario=? AND p.ronda=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, username);
+			pstmt.setInt(2, ronda);
 			ResultSet rs = pstmt.executeQuery();
 
 			if (rs.next()) {
 				id =rs.getInt("id");
 			}
 		} catch (Exception ex) {
-			System.err.println("Error al obtener el experimento");
+			System.err.println("Error al obtener la participacion");
 			ex.printStackTrace();
 		}
 		return id;

@@ -14,7 +14,7 @@ public class Launcher {
 				try {
 					TCPAdmin.main(new String[0]);
 				} catch (Exception e) {
-					System.err.println("Error en el servidor de adminstracion");
+					System.err.println("Error en el servidor de administracion");
 				}
 			}
 		}.start();

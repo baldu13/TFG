@@ -9,6 +9,7 @@ public class Experimento {
 	private String nombre;
 	private Date fecha;
 	private int maxRondas;
+	private int numParticipantes;
 	private boolean grupal;
 	private int numGrupos;
 	private TipoExperimento tipo;
@@ -63,5 +64,13 @@ public class Experimento {
 	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public int getNumParticipantes() {
+		return numParticipantes;
+	}
+
+	public void setNumParticipantes(int numParticipantes) {
+		this.numParticipantes = numParticipantes;
 	}	
 }

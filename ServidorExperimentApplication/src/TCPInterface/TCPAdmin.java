@@ -14,7 +14,7 @@ public class TCPAdmin {
 	private static final IAdministracion admin = new AdminFacade();
 
 	public static void main(String argv[]) throws Exception {
-		System.out.println("Servidor de adminstracion INICIADO");
+		System.out.println("Servidor de administracion INICIADO");
 		ServerSocket welcomeSocket = new ServerSocket(SERVER_PORT);
 		while (true) {
 			try {
@@ -37,6 +37,7 @@ public class TCPAdmin {
 						outToClient.writeBytes("\n"); // Mandamos linea
 						outToClient.writeInt(e.getMaxRondas());
 						outToClient.writeInt(e.getNumGrupos());
+						outToClient.writeInt(e.getNumParticipantes());
 						outToClient.writeInt(e.getTipo().getId());
 						outToClient.writeLong(e.getFecha().getTime());
 					}
@@ -76,11 +77,10 @@ public class TCPAdmin {
 					int idExInforme = inFromClient.readInt();
 					//Procesamos
 					Informe i = admin.informeExperimento(idExInforme);
-					System.out.println(i.getResultados().size());
 					//Retornamos informacion
 					outToClient.writeInt(i.getResultados().size());
-					for(Resultado r: i.getResultados()){
-						System.out.println("Usuario: "+r.getParticipante().getUsuario());
+					for(int j=0; j<i.getResultados().size();j++){
+						Resultado r = i.getResultados().get(j);
 						outToClient.writeInt(r.getParticipante().getNumGrupo());
 						outToClient.writeInt(r.getParticipante().getRonda().getNumRonda());
 						outToClient.writeBytes(r.getParticipante().getUsuario().getUsuario()+"\n");
@@ -88,6 +88,7 @@ public class TCPAdmin {
 						outToClient.writeBytes(r.getValorTexto()+"\n");
 						outToClient.writeFloat(r.getValorNumerico());
 					}
+					break;
 				default:
 					// No hacer nada, peticion erronea
 				}

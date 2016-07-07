@@ -14,10 +14,13 @@ public class UserFacade implements IUsuario{
 	}
 	
 	@Override
-	public void enviaResultadoFondoPublico(ResultadoFondoPublico rfp) {
+	public void enviaResultadoFondoPublico(ResultadoFondoPublico rfp, int ronda) {
 		Resultado r = new Resultado();
 		Participacion p = new Participacion();
 		p.setUsuario(rfp.getUsuario());
+		Ronda ro = new Ronda();
+		ro.setNumRonda(ronda);
+		p.setRonda(ro);
 		r.setParticipante(p);
 		TipoResultado tr = new TipoResultado();
 		tr.setId(3); //Tipo fondo privado
@@ -28,6 +31,7 @@ public class UserFacade implements IUsuario{
 		r = new Resultado();
 		p = new Participacion();
 		p.setUsuario(rfp.getUsuario());
+		p.setRonda(ro);
 		r.setParticipante(p);
 		tr = new TipoResultado();
 		tr.setId(2); //Tipo fondo publico
@@ -37,10 +41,13 @@ public class UserFacade implements IUsuario{
 	}
 	
 	@Override
-	public void enviaResultadoBeautyContest(ResultadoBeautyContest rbc) {
+	public void enviaResultadoBeautyContest(ResultadoBeautyContest rbc, int ronda) {
 		Resultado r = new Resultado();
 		Participacion p = new Participacion();
 		p.setUsuario(rbc.getUsuario());
+		Ronda ro = new Ronda();
+		ro.setNumRonda(ronda);
+		p.setRonda(ro);
 		r.setParticipante(p);
 		TipoResultado tr = new TipoResultado();
 		tr.setId(1); //Tipo beauty contest

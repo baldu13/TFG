@@ -5,9 +5,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 
 import model.Experimento;
+import model.ResultadoBeautyContest;
+import model.ResultadoFondoPublico;
+import model.Usuario;
 import presentation.IUsuario;
 import presentation.UserFacade;
 
@@ -33,15 +38,22 @@ public class TCPClient {
 	
 	        System.out.println("CLIENTE Recibida peticion. Codigo de operacion " + op);
 	        
+	        //Variables
+	        byte[] var;
+	        int l;
+	        String user;
+	        Usuario u;
+	        float f;
+	        
 	        switch(op){
 	        case 1: //logeaExperimento
 	        	//Usuario
-	        	byte[] var = new byte[4];
+	        	var = new byte[4];
 	        	is.read(var,0, 4);
-	        	int l = bytesToInteger(var);
+	        	l = bytesToInteger(var);
 	        	var = new byte[l];
 	        	is.read(var, 0, l);
-	        	String user = new String(var,StandardCharsets.UTF_8);
+	        	user = new String(var,StandardCharsets.UTF_8);
 	        	
 	        	//Pass
 	        	var = new byte[4];
@@ -53,15 +65,80 @@ public class TCPClient {
 	        	
 	        	Experimento e = client.logeaExperimento(user, pass);
 	        	
-	        	//Enviamos id y tipo del experimento
+	        	//Enviamos id, tipo del experimento y rondas
 	        	if(e!=null){
 	        		//Identificacion correcta
 	        		os.write(intToBytes(e.getId()));
 	        		os.write(intToBytes(e.getTipo().getId()));
+	        		os.write(intToBytes(e.getMaxRondas()));
 	        	}else{
 	        		//Identificacion invalida
 	        		os.write(intToBytes(0));
 	        		os.write(intToBytes(0));
+	        		os.write(intToBytes(0));
+	        	}
+	        	break;
+	        case 2: //Enviar resultado
+	        	var = new byte[4];
+	        	is.read(var,0, 4);
+	        	l = bytesToInteger(var); //Tipo de resultado
+	        	switch(l){
+	        	case 1: //Beauty contest
+	        		var = new byte[4];
+	        		is.read(var,0, 4);
+		        	f = bytesToInteger(var); //Resultado
+		        	
+		        	ResultadoBeautyContest rbc = new ResultadoBeautyContest();
+		        	rbc.setNumElegido(f);
+		        	
+		        	var = new byte[4];
+		        	is.read(var,0, 4);
+		        	l = bytesToInteger(var);
+		        	var = new byte[l];
+		        	is.read(var, 0, l);
+		        	user = new String(var,StandardCharsets.UTF_8);
+		        	
+		        	u = new Usuario();
+		        	u.setUsuario(user);
+		        	rbc.setUsuario(u);
+		        	
+		        	var = new byte[4];
+		        	is.read(var,0, 4);
+		        	l = bytesToInteger(var); //Ronda
+		        	
+		        	client.enviaResultadoBeautyContest(rbc,l);
+	        		break;
+	        	case 2: //FondoPublicoPrivado
+	        		var = new byte[4];
+	        		is.read(var,0, 4);
+		        	f = bytesToInteger(var); //Resultado publico
+		        	
+		        	ResultadoFondoPublico rfp = new ResultadoFondoPublico();
+		        	rfp.setCantidadPublico(f);
+		        	
+		        	var = new byte[4];
+	        		is.read(var,0, 4);
+		        	f = bytesToInteger(var); //Resultado privado
+		        	
+		        	rfp.setCantidadPrivado(f);
+		        	
+		        	var = new byte[4];
+		        	is.read(var,0, 4);
+		        	l = bytesToInteger(var);
+		        	var = new byte[l];
+		        	is.read(var, 0, l);
+		        	user = new String(var,StandardCharsets.UTF_8);
+		        	
+		        	u = new Usuario();
+		        	u.setUsuario(user);
+		        	rfp.setUsuario(u);
+		        	
+		        	var = new byte[4];
+		        	is.read(var,0, 4);
+		        	l = bytesToInteger(var); //Ronda
+		        	
+		        	client.enviaResultadoFondoPublico(rfp,l);
+	        		break;
 	        	}
 	        	break;
 	        default:
@@ -75,6 +152,11 @@ public class TCPClient {
                 ((bytes[1] & 0xff) << 8) | (bytes[0] & 0xff));
     }
     
+    
+    public static float bytesToFloat(byte[] bytes){
+    	return ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).getFloat();
+    }
+    
     public static byte[] intToBytes(int value){
     	return new byte[] {
                 (byte)(value >>> 24),
@@ -82,4 +164,6 @@ public class TCPClient {
                 (byte)(value >>> 8),
                 (byte)value};
     }
+    
+    
 }

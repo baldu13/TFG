@@ -42,7 +42,7 @@ public class TestUsuario {
 		Usuario u = new Usuario();
 		u.setUsuario("ex10u2");
 		r.setUsuario(u);
-		user.enviaResultadoBeautyContest(r);
+		user.enviaResultadoBeautyContest(r,1);
 		System.out.println("\n------------------------------------------\n\n");
 	}
 }
