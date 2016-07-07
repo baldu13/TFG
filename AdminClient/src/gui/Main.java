@@ -25,7 +25,6 @@ public class Main extends JFrame {
 	
 	private static Main frame;
 	private static FormExperimento formularioExperimento;
-	private static ListExperimentos listaExperimentos;
 
 	/**
 	 * Launch the application.
@@ -80,7 +79,7 @@ public class Main extends JFrame {
 		JButton btnVerExperimentos = new JButton("Ver Experimentos");
 		btnVerExperimentos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				listaExperimentos = new ListExperimentos(ServerConnection.getExperimentos(),actual);
+				new ListExperimentos(ServerConnection.getExperimentos(),actual);
 				setVisible(false);
 			}
 		});

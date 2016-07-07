@@ -11,6 +11,7 @@ public class Experimento {
 	private int maxRondas;
 	private boolean grupal;
 	private int numGrupos;
+	private int numParticipantes;
 	private TipoExperimento tipo;
 	
 	//Metodos
@@ -69,5 +70,13 @@ public class Experimento {
 	public String toString(){
 		//Para mostrarlo en la lista
 		return nombre;
+	}
+
+	public int getNumParticipantes() {
+		return numParticipantes;
+	}
+
+	public void setNumParticipantes(int numParticipantes) {
+		this.numParticipantes = numParticipantes;
 	}
 }

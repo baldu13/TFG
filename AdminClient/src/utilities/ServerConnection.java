@@ -6,11 +6,20 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import model.*;
 
 public class ServerConnection {
 	
-	private static final String SERVER_IP = "localhost";
+	private static final String SERVER_IP = getServerIp();
 	private static final int SERVER_PORT = 12002;
 
 	public static CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas){
@@ -108,6 +117,7 @@ public class ServerConnection {
 				e.setNombre(inFromServer.readLine());
 				e.setMaxRondas(inFromServer.readInt());
 				e.setNumGrupos(inFromServer.readInt());
+				e.setNumParticipantes(inFromServer.readInt());
 				
 				int tipo = inFromServer.readInt();
 				TipoExperimento te = new TipoExperimento();
@@ -160,5 +170,22 @@ public class ServerConnection {
 			System.err.println("Error al conectar con el servidor");
 		}
 		return listaUsuarios;
+	}
+	
+	public static String getServerIp(){
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		try{
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse("resources/config.xml");
+			
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			Node node = (Node) xpath.evaluate("//config/serverIp/text()", doc, XPathConstants.NODE);
+			System.out.println("IP: "+node.getNodeValue());
+			return node.getNodeValue();
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println("IP error");
+			return "";
+		}
 	}
 }

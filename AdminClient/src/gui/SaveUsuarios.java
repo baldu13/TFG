@@ -29,10 +29,12 @@ public class SaveUsuarios extends JFrame {
 			String path = f+"\\usersExp"+toPrint.getIdExperimento()+".txt";
 			File fichero = new File(path);
 			PrintWriter writer = new PrintWriter(fichero,"UTF-8");
-			writer.print("Usuarios para el experimento "+toPrint.getIdExperimento()+"\n\n");
+			writer.println("Usuarios para el experimento "+toPrint.getIdExperimento());
+			writer.println();
 			for(Usuario u: toPrint.getUsuarios()){
-				writer.print("Usuario: "+u.getUsuario()+"\n");
-				writer.print("Contraseña: "+u.getClave()+"\n\n");
+				writer.println("Usuario: "+u.getUsuario());
+				writer.println("Contraseña: "+u.getClave());
+				writer.println();
 			}
 			writer.close();
 			f.setReadable(true);

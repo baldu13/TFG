@@ -24,7 +24,7 @@ public class InfoExperimento extends JFrame {
 	 */
 	public InfoExperimento(Experimento e, JFrame previous) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 310);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -44,10 +44,15 @@ public class InfoExperimento extends JFrame {
 		lblNombre.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNombre.setBounds(52, 73, 66, 14);
 		contentPane.add(lblNombre);
+
+		JLabel lblParticipantes = new JLabel("Participantes:");
+		lblParticipantes.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblParticipantes.setBounds(52, 123, 89, 14);
+		contentPane.add(lblParticipantes);
 		
 		JLabel lblNRondas = new JLabel("N\u00BA Rondas:");
 		lblNRondas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNRondas.setBounds(52, 124, 66, 14);
+		lblNRondas.setBounds(52, 151, 66, 14);
 		contentPane.add(lblNRondas);
 		
 		JLabel lblTipo = new JLabel("Tipo:");
@@ -57,12 +62,12 @@ public class InfoExperimento extends JFrame {
 		
 		JLabel lblTamaoDeLos = new JLabel("Tama\u00F1o de los grupos:");
 		lblTamaoDeLos.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblTamaoDeLos.setBounds(52, 149, 131, 14);
+		lblTamaoDeLos.setBounds(52, 176, 131, 14);
 		contentPane.add(lblTamaoDeLos);
 		
 		JLabel lblFechaDeCreacin = new JLabel("Fecha de creaci\u00F3n:");
 		lblFechaDeCreacin.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblFechaDeCreacin.setBounds(52, 174, 104, 14);
+		lblFechaDeCreacin.setBounds(52, 202, 104, 14);
 		contentPane.add(lblFechaDeCreacin);
 		
 		JButton btnAtrs = new JButton("Atr\u00E1s");
@@ -72,20 +77,19 @@ public class InfoExperimento extends JFrame {
 				dispose();
 			}
 		});
-		btnAtrs.setBounds(25, 227, 89, 23);
+		btnAtrs.setBounds(25, 237, 89, 23);
 		contentPane.add(btnAtrs);
 		
 		JButton btnGenerarInforme = new JButton("Generar informe");
 		btnGenerarInforme.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Informe i = ServerConnection.informeExperimento(e.getId());
-				System.out.println("Informe: "+i.getResultados().size());
 				i.setExperimento(e);
 				new GenerateInforme(previous, i);
 				dispose();
 			}
 		});
-		btnGenerarInforme.setBounds(276, 227, 131, 23);
+		btnGenerarInforme.setBounds(274, 237, 131, 23);
 		contentPane.add(btnGenerarInforme);
 		
 		JLabel lblId_1 = new JLabel(String.valueOf(e.getId()));
@@ -96,21 +100,25 @@ public class InfoExperimento extends JFrame {
 		lblNombre_1.setBounds(110, 73, 246, 14);
 		contentPane.add(lblNombre_1);
 		
+		JLabel lblParticipantes_1 = new JLabel(String.valueOf(e.getNumParticipantes()));
+		lblParticipantes_1.setBounds(139, 123, 46, 14);
+		contentPane.add(lblParticipantes_1);
+		
 		JLabel lblTipo_1 = new JLabel(e.getTipo().getTipo());
 		lblTipo_1.setBounds(88, 98, 293, 14);
 		contentPane.add(lblTipo_1);
 		
 		JLabel lblRondas = new JLabel(String.valueOf(e.getMaxRondas()));
-		lblRondas.setBounds(128, 124, 46, 14);
+		lblRondas.setBounds(128, 151, 46, 14);
 		contentPane.add(lblRondas);
 		
 		JLabel lblTamgrupos = new JLabel(String.valueOf(e.getNumGrupos()));
-		lblTamgrupos.setBounds(193, 149, 46, 14);
+		lblTamgrupos.setBounds(193, 176, 46, 14);
 		contentPane.add(lblTamgrupos);
 		
 		SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
 		JLabel lblFecha = new JLabel(formatterDate.format(e.getFecha()));
-		lblFecha.setBounds(169, 174, 200, 14);
+		lblFecha.setBounds(166, 202, 200, 14);
 		contentPane.add(lblFecha);
 		
 		JButton btnGenerarUsuarios = new JButton("Generar usuarios");
@@ -124,7 +132,7 @@ public class InfoExperimento extends JFrame {
 				dispose();
 			}
 		});
-		btnGenerarUsuarios.setBounds(124, 227, 142, 23);
+		btnGenerarUsuarios.setBounds(124, 237, 142, 23);
 		contentPane.add(btnGenerarUsuarios);
 		
 		setVisible(true);

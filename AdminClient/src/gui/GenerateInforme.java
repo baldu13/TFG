@@ -35,22 +35,28 @@ public class GenerateInforme extends JFrame {
 			writer.println("---------------------------------------------------------");
 			writer.println("Tipo: "+toPrint.getExperimento().getTipo().getTipo());
 			writer.println("Nombre: "+toPrint.getExperimento().getNombre());
+			writer.println("Numero de participantes: "+toPrint.getExperimento().getNumParticipantes());
 			writer.println("Numero de rondas: "+toPrint.getExperimento().getMaxRondas());
 			writer.println("Numero de grupos: "+toPrint.getExperimento().getNumGrupos());
 			writer.println("\n-------------------------------------------------------\n");
 			writer.println("RESULTADOS\n");
+			writer.println();
 			List<Resultado>[] resultadosRonda = resultadosPorRonda(toPrint.getResultados(), toPrint.getExperimento().getMaxRondas());
 			switch(toPrint.getExperimento().getTipo().getId()){
 			case 1:
 				for(int i=0;i<resultadosRonda.length;i++){
-					writer.println("RONDA "+(i+1));
+					writer.println("   RONDA "+(i+1));
+					writer.println();
 					printResultadosBeautyContest(writer,resultadosRonda[i]);
+					writer.println();
 				}
 				break;
 			case 2:
 				for(int i=0;i<resultadosRonda.length;i++){
-					writer.println("RONDA "+(i+1));
+					writer.println("   RONDA "+(i+1));
+					writer.println();
 					printResultadosFondoPublicoPrivado(writer,resultadosRonda[i]);
+					writer.println();
 				}
 				break;
 			default:
@@ -66,42 +72,47 @@ public class GenerateInforme extends JFrame {
 	private void printResultadosFondoPublicoPrivado(PrintWriter writer, List<Resultado> resultados) {
 		//TODO calcular invertido en cada fondo y repartir
 		for(Resultado r: resultados){
-			writer.println("Usuario: "+r.getParticipante().getUsuario().getUsuario());
-			writer.println("Grupo: "+r.getParticipante().getNumGrupo());
-			writer.println("Fondo destinado: "+r.getTipo().getEtiqueta());
-			writer.println("Valor seleccionado: "+r.getValorNumerico());
+			writer.println("         Usuario: "+r.getParticipante().getUsuario().getUsuario());
+			writer.println("         Grupo: "+r.getParticipante().getNumGrupo());
+			writer.println("         Fondo destinado: "+r.getTipo().getEtiqueta());
+			writer.println("         Valor seleccionado: "+r.getValorNumerico());
+			writer.println();
 		}
 	}
 
 	private void printResultadosBeautyContest(PrintWriter writer, List<Resultado> resultados) {
-		float total = 0;
-		for(Resultado r: resultados){
-			writer.println("Usuario: "+r.getParticipante().getUsuario().getUsuario());
-			writer.println("Grupo: "+r.getParticipante().getNumGrupo());
-			writer.println("Valor seleccionado: "+r.getValorNumerico());
-			total += r.getValorNumerico();
+		if(resultados.size()>0){
+			float total = 0;
+			
+			for(Resultado r: resultados){
+				writer.println("         Usuario: "+r.getParticipante().getUsuario().getUsuario());
+				writer.println("         Grupo: "+r.getParticipante().getNumGrupo());
+				writer.println("         Valor seleccionado: "+r.getValorNumerico());
+				total += r.getValorNumerico();
+				writer.println();
+			}
+			writer.println();
+			total /= resultados.size();
+			total *= 0.75;
+			writer.println("      3/4 de la media: "+total);
+			writer.println();
+	
+			Resultado winner = resultados.get(0);
+			float diferencia;
+			float distancia;
+			for(Resultado r: resultados){
+				diferencia = Math.abs(total-winner.getValorNumerico());
+				distancia = Math.abs(total-r.getValorNumerico());
+				if(distancia<diferencia){
+					winner = r; //Está mas cerca del resultado
+				}
+			}
+			writer.println("      Ganador "+winner.getParticipante().getUsuario().getUsuario()+" con el número "+winner.getValorNumerico());
 			writer.println();
 		}
-		writer.println();
-		total /= resultados.size();
-		total *= 0.75;
-		writer.println("3/4 de la media: "+total);
-
-		Resultado winner = resultados.get(0);
-		float diferencia;
-		float distancia;
-		for(Resultado r: resultados){
-			diferencia = Math.abs(total-winner.getValorNumerico());
-			distancia = Math.abs(total-r.getValorNumerico());
-			if(distancia<diferencia){
-				winner = r; //Está mas cerca del resultado
-			}
-		}
-		writer.println("Ganador "+winner.getParticipante().getUsuario().getUsuario()+" con el número "+winner.getValorNumerico());
 	}
 	
 	private List<Resultado>[] resultadosPorRonda(List<Resultado> resuls, int maxRonda){
-		System.out.println("RESULTADOS: "+resuls.size());
 		if(maxRonda!=0){
 			List<Resultado>[] resultados = new List[maxRonda];
 			
