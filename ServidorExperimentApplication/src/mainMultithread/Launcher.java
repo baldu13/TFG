@@ -1,9 +1,6 @@
-package main;
+package mainMultithread;
 
 import java.io.IOException;
-
-import TCPInterface.TCPAdmin;
-import TCPInterface.TCPClient;
 
 public class Launcher {
 
