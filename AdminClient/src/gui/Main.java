@@ -10,9 +10,7 @@ import javax.swing.border.EmptyBorder;
 import utilities.ServerConnection;
 
 import java.awt.GridLayout;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;

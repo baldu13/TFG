@@ -177,14 +177,11 @@ public class ServerConnection {
 		try{
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document doc = builder.parse("resources/config.xml");
-			
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			Node node = (Node) xpath.evaluate("//config/serverIp/text()", doc, XPathConstants.NODE);
-			System.out.println("IP: "+node.getNodeValue());
 			return node.getNodeValue();
 		}catch(Exception e){
 			e.printStackTrace();
-			System.out.println("IP error");
 			return "";
 		}
 	}
