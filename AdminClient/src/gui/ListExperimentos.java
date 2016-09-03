@@ -50,6 +50,7 @@ public class ListExperimentos extends JFrame {
 		
 		JButton btnAtrs = new JButton("Atr\u00E1s");
 		btnAtrs.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				previous.setVisible(true);
 				dispose();
@@ -58,6 +59,7 @@ public class ListExperimentos extends JFrame {
 		btnAtrs.setBounds(5, 233, 81, 23);
 		contentPane.add(btnAtrs);
 		list.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Experimento selectedItem = (Experimento) list.getSelectedValue();
 				new InfoExperimento(selectedItem,actual);

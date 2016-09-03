@@ -65,7 +65,6 @@ public class GenerateInforme extends JFrame {
 			writer.close();
 		} catch (Exception e) {
 			new MensajeUsuario("No se pudo generar el fichero");
-			e.printStackTrace();
 		}
 	}
 
@@ -81,7 +80,7 @@ public class GenerateInforme extends JFrame {
 	}
 
 	private void printResultadosBeautyContest(PrintWriter writer, List<Resultado> resultados) {
-		if(resultados.size()>0){
+		if(!resultados.isEmpty()){
 			float total = 0;
 			
 			for(Resultado r: resultados){

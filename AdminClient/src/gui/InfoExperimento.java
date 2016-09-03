@@ -30,48 +30,51 @@ public class InfoExperimento extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		Font fuente = new Font("Tahoma", Font.BOLD, 11);
+		
 		JLabel lblExperimento = new JLabel("Experimento:");
 		lblExperimento.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblExperimento.setBounds(25, 11, 131, 26);
 		contentPane.add(lblExperimento);
 		
 		JLabel lblId = new JLabel("ID:");
-		lblId.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblId.setFont(fuente);
 		lblId.setBounds(52, 48, 46, 14);
 		contentPane.add(lblId);
 		
 		JLabel lblNombre = new JLabel("Nombre:");
-		lblNombre.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNombre.setFont(fuente);
 		lblNombre.setBounds(52, 73, 66, 14);
 		contentPane.add(lblNombre);
 
 		JLabel lblParticipantes = new JLabel("Participantes:");
-		lblParticipantes.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblParticipantes.setFont(fuente);
 		lblParticipantes.setBounds(52, 123, 89, 14);
 		contentPane.add(lblParticipantes);
 		
 		JLabel lblNRondas = new JLabel("N\u00BA Rondas:");
-		lblNRondas.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblNRondas.setFont(fuente);
 		lblNRondas.setBounds(52, 151, 66, 14);
 		contentPane.add(lblNRondas);
 		
 		JLabel lblTipo = new JLabel("Tipo:");
-		lblTipo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblTipo.setFont(fuente);
 		lblTipo.setBounds(52, 98, 46, 14);
 		contentPane.add(lblTipo);
 		
 		JLabel lblTamaoDeLos = new JLabel("Tama\u00F1o de los grupos:");
-		lblTamaoDeLos.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblTamaoDeLos.setFont(fuente);
 		lblTamaoDeLos.setBounds(52, 176, 131, 14);
 		contentPane.add(lblTamaoDeLos);
 		
 		JLabel lblFechaDeCreacin = new JLabel("Fecha de creaci\u00F3n:");
-		lblFechaDeCreacin.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblFechaDeCreacin.setFont(fuente);
 		lblFechaDeCreacin.setBounds(52, 202, 104, 14);
 		contentPane.add(lblFechaDeCreacin);
 		
 		JButton btnAtrs = new JButton("Atr\u00E1s");
 		btnAtrs.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				previous.setVisible(true);
 				dispose();
@@ -82,6 +85,7 @@ public class InfoExperimento extends JFrame {
 		
 		JButton btnGenerarInforme = new JButton("Generar informe");
 		btnGenerarInforme.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Informe i = ServerConnection.informeExperimento(e.getId());
 				i.setExperimento(e);
@@ -123,6 +127,7 @@ public class InfoExperimento extends JFrame {
 		
 		JButton btnGenerarUsuarios = new JButton("Generar usuarios");
 		btnGenerarUsuarios.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ex) {
 				List<Usuario> listaUsuarios = ServerConnection.getListaUsuariosExperimento(e.getId());
 				CrearExperimentoResponseDTO print = new CrearExperimentoResponseDTO();

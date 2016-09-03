@@ -8,7 +8,7 @@ public class Usuario {
 	private String clave;
 	
 	//Metodos
-	public Usuario() {};
+	public Usuario() {}
 	
 	public Usuario(String usuario, String clave) {
 		this.usuario = usuario;

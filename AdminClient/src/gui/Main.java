@@ -29,14 +29,13 @@ public class Main extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					frame = new Main();
 					formularioExperimento = new FormExperimento(frame);
 					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} catch (Exception e) {}
 			}
 		});
 	}
@@ -66,6 +65,7 @@ public class Main extends JFrame {
 		JButton btnCrearNuevoExperimento = new JButton("Crear Nuevo Experimento");
 		btnCrearNuevoExperimento.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		btnCrearNuevoExperimento.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//Se muestra el formulario para crear un experimento
 				formularioExperimento.setVisible(true);
@@ -76,6 +76,7 @@ public class Main extends JFrame {
 		
 		JButton btnVerExperimentos = new JButton("Ver Experimentos");
 		btnVerExperimentos.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				new ListExperimentos(ServerConnection.getExperimentos(),actual);
 				setVisible(false);

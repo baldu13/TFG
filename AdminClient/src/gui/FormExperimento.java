@@ -34,51 +34,53 @@ public class FormExperimento extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		Font fuente = new Font("Tahoma", Font.PLAIN, 14);
+		
 		JLabel lblNombreDelExperimento = new JLabel("Nombre del experimento:");
-		lblNombreDelExperimento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNombreDelExperimento.setFont(fuente);
 		lblNombreDelExperimento.setBounds(46, 46, 177, 22);
 		contentPane.add(lblNombreDelExperimento);
 		
 		JLabel lblNmeroDeParticipantes = new JLabel("N\u00FAmero de participantes:");
-		lblNmeroDeParticipantes.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNmeroDeParticipantes.setFont(fuente);
 		lblNmeroDeParticipantes.setBounds(46, 79, 177, 22);
 		contentPane.add(lblNmeroDeParticipantes);
 		
 		JLabel lblNmeroDeRondas = new JLabel("N\u00FAmero de rondas:");
-		lblNmeroDeRondas.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNmeroDeRondas.setFont(fuente);
 		lblNmeroDeRondas.setBounds(46, 114, 177, 22);
 		contentPane.add(lblNmeroDeRondas);
 		
 		JLabel lblTamaoDeLos = new JLabel("Tama\u00F1o de los grupos:");
-		lblTamaoDeLos.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTamaoDeLos.setFont(fuente);
 		lblTamaoDeLos.setBounds(46, 149, 177, 22);
 		contentPane.add(lblTamaoDeLos);
 		
 		JLabel lblTipoDeExperimento = new JLabel("Tipo de experimento:");
-		lblTipoDeExperimento.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTipoDeExperimento.setFont(fuente);
 		lblTipoDeExperimento.setBounds(46, 182, 177, 22);
 		contentPane.add(lblTipoDeExperimento);
 		
 		textFieldNombre = new JTextField();
-		textFieldNombre.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldNombre.setFont(fuente);
 		textFieldNombre.setBounds(221, 49, 177, 20);
 		contentPane.add(textFieldNombre);
 		textFieldNombre.setColumns(10);
 		
 		textFieldUsuarios = new JTextField();
-		textFieldUsuarios.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldUsuarios.setFont(fuente);
 		textFieldUsuarios.setBounds(221, 82, 31, 20);
 		contentPane.add(textFieldUsuarios);
 		textFieldUsuarios.setColumns(10);
 		
 		textFieldRondas = new JTextField();
-		textFieldRondas.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldRondas.setFont(fuente);
 		textFieldRondas.setBounds(221, 117, 31, 20);
 		contentPane.add(textFieldRondas);
 		textFieldRondas.setColumns(10);
 		
 		textFieldGrupos = new JTextField();
-		textFieldGrupos.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFieldGrupos.setFont(fuente);
 		textFieldGrupos.setBounds(221, 152, 31, 20);
 		contentPane.add(textFieldGrupos);
 		textFieldGrupos.setColumns(10);
@@ -96,6 +98,7 @@ public class FormExperimento extends JFrame {
 		
 		JButton btnCrear = new JButton("Crear");
 		btnCrear.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				TipoExperimento te = new TipoExperimento();
 				if("Beauty Contest".equals((String)comboBoxTipo.getSelectedItem())){
@@ -122,6 +125,7 @@ public class FormExperimento extends JFrame {
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				//Volver al main
 				main.setVisible(true);

@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 import model.*;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 
 public class SaveUsuarios extends JFrame {
@@ -40,7 +39,6 @@ public class SaveUsuarios extends JFrame {
 			f.setReadable(true);
 		} catch (Exception e) {
 			new MensajeUsuario("No se pudo generar el fichero");
-			e.printStackTrace();
 		}
 	}
 }

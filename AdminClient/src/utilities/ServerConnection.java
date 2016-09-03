@@ -6,14 +6,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
+import org.apache.commons.io.IOUtils;
 
 import model.*;
 
@@ -21,6 +14,9 @@ public class ServerConnection {
 	
 	private static final String SERVER_IP = getServerIp();
 	private static final int SERVER_PORT = 12002;
+	private static String txtError = "Error al conectar con el servidor";
+	
+	private ServerConnection(){}
 
 	public static CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas){
 		CrearExperimentoResponseDTO response = new CrearExperimentoResponseDTO();
@@ -49,8 +45,7 @@ public class ServerConnection {
 			//Cerramos la conexion
 			clientSocket.close();
 		}catch(Exception e){
-			e.printStackTrace();
-			System.err.println("Error al conectar con el servidor");
+			System.err.println(txtError);
 		}
 		
 		return response;
@@ -92,8 +87,7 @@ public class ServerConnection {
 			//Cerramos la conexion
 			clientSocket.close();
 		}catch(Exception e){
-			e.printStackTrace();
-			System.err.println("Error al conectar con el servidor");
+			System.err.println(txtError);
 		}
 		return i;
 	}
@@ -138,8 +132,7 @@ public class ServerConnection {
 			//Cerramos la conexion
 			clientSocket.close();
 		}catch(Exception e){
-			e.printStackTrace();
-			System.err.println("Error al conectar con el servidor");
+			System.err.println(txtError);
 		}
 		return lista;
 	}
@@ -166,23 +159,18 @@ public class ServerConnection {
 			//Cerramos la conexion
 			clientSocket.close();
 		}catch(Exception e){
-			e.printStackTrace();
-			System.err.println("Error al conectar con el servidor");
+			System.err.println(txtError);
 		}
 		return listaUsuarios;
 	}
 	
 	public static String getServerIp(){
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try{
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse("resources/config.xml");
-			XPath xpath = XPathFactory.newInstance().newXPath();
-			Node node = (Node) xpath.evaluate("//config/serverIp/text()", doc, XPathConstants.NODE);
-			return node.getNodeValue();
+			System.out.println("llega");
+			InputStream stream = ServerConnection.class.getResourceAsStream("serverip.txt");
+			return IOUtils.toString(stream);
 		}catch(Exception e){
-			e.printStackTrace();
-			return "";
+			return "mal";
 		}
 	}
 }
