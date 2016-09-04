@@ -26,6 +26,8 @@ public class ExperimentApplicationDAO {
 	private PreparedStatement pstmt = null;
 
 	private String sql;
+	
+	private String errorConexion = "Error al cerrar la conexion";
 
 	public ExperimentApplicationDAO() {
 		try {
@@ -66,7 +68,6 @@ public class ExperimentApplicationDAO {
 			return u;
 		} catch (Exception e) {
 			System.err.println("Error al crear el usuario");
-			e.printStackTrace();
 			return null;
 		} finally {
 			try {
@@ -77,7 +78,7 @@ public class ExperimentApplicationDAO {
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 	}
@@ -131,7 +132,7 @@ public class ExperimentApplicationDAO {
 				if (conn != null)
 					conn.close();
 			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 	}
@@ -193,7 +194,6 @@ public class ExperimentApplicationDAO {
 			}
 		} catch (Exception ex) {
 			System.err.println("Error al obtener el experimento de un usuario");
-			ex.printStackTrace();
 		} finally {
 			try {
 				if (stmt != null)
@@ -203,7 +203,7 @@ public class ExperimentApplicationDAO {
 				if (conn != null)
 					conn.close();
 			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 		return e;
@@ -223,7 +223,6 @@ public class ExperimentApplicationDAO {
 			pstmt.execute();
 		} catch (Exception e) {
 			System.err.println("Error al crear el resultado");
-			e.printStackTrace();
 		} finally {
 			try {
 				if (stmt != null)
@@ -233,7 +232,7 @@ public class ExperimentApplicationDAO {
 				if (conn != null)
 					conn.close();
 			} catch (Exception e) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 	}
@@ -253,7 +252,6 @@ public class ExperimentApplicationDAO {
 			}
 		} catch (Exception e) {
 			System.err.println("Error al consultar el numero de participantes");
-			e.printStackTrace();
 			return 0;
 		}
 	}
@@ -278,7 +276,6 @@ public class ExperimentApplicationDAO {
 			pstmt.execute();
 		} catch (Exception ex) {
 			System.err.println("Error al crear la participacion");
-			ex.printStackTrace();
 		} finally {
 			try {
 				if (stmt != null)
@@ -288,7 +285,7 @@ public class ExperimentApplicationDAO {
 				if (conn != null)
 					conn.close();
 			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 	}
@@ -327,17 +324,14 @@ public class ExperimentApplicationDAO {
 			
 		} catch (Exception ex) {
 			System.err.println("Error al obtener los resultados");
-			ex.printStackTrace();
 		} finally {
 			try {
 				if (stmt != null)
 					stmt.close();
 				if (pstmt != null)
 					pstmt.close();
-				if (conn != null);
-					//conn.close();
 			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 		
@@ -371,9 +365,6 @@ public class ExperimentApplicationDAO {
 			return lista;
 		}catch(Exception e){
 			System.err.println("Error al obtener loss experimentos");
-			e.printStackTrace();
-		}finally{
-			
 		}
 		return new ArrayList<Experimento>();
 	}
@@ -400,7 +391,7 @@ public class ExperimentApplicationDAO {
 				if(conn!=null)
 					conn.close();
 			}catch(Exception e){
-				System.err.println("Error la cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 	}
@@ -435,6 +426,8 @@ public class ExperimentApplicationDAO {
 			case 2:
 				//Fondo publico privado, 2 resultados por usuario
 				return numResultados>=(2*numUsuarios);
+			default:
+				return false; //Caso incorrecto	
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -446,7 +439,7 @@ public class ExperimentApplicationDAO {
 				if(conn!=null)
 					conn.close();
 			}catch(Exception e){
-				System.err.println("Error la cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 		return false;//cualquier otro caso
@@ -466,7 +459,6 @@ public class ExperimentApplicationDAO {
 			pstmt.execute();
 		} catch (Exception ex) {
 			System.err.println("Error al crear la ronda");
-			ex.printStackTrace();
 		} finally {
 			try {
 				if (stmt != null)
@@ -476,7 +468,7 @@ public class ExperimentApplicationDAO {
 				if (conn != null)
 					conn.close();
 			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 	}
@@ -501,7 +493,6 @@ public class ExperimentApplicationDAO {
 			return p;
 		}catch(Exception e){
 			System.err.println("Error al obtener la participacion");
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -521,7 +512,6 @@ public class ExperimentApplicationDAO {
 			return u;
 		}catch(Exception e){
 			System.err.println("Error al obtener el usuario");
-			e.printStackTrace();
 		}finally {
 			try {
 				if (stmt != null)
@@ -531,7 +521,7 @@ public class ExperimentApplicationDAO {
 				if (conn != null)
 					conn.close();
 			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 		return null;
@@ -553,7 +543,6 @@ public class ExperimentApplicationDAO {
 			return tr;
 		}catch(Exception e){
 			System.err.println("Error al obtener el tipo de experimento");
-			e.printStackTrace();
 		}finally {
 			try {
 				if (stmt != null)
@@ -563,7 +552,7 @@ public class ExperimentApplicationDAO {
 				if (conn != null)
 					conn.close();
 			} catch (Exception ex) {
-				System.err.println("Error al cerrar la conexion");
+				System.err.println(errorConexion);
 			}
 		}
 		return null;
@@ -599,11 +588,10 @@ public class ExperimentApplicationDAO {
 					te.setTipo(rs.getString("tipo"));
 					e.setTipo(te);
 				}
-				e.setNumParticipantes(participacionesExperimento((e.getId()/e.getMaxRondas())));
+				e.setNumParticipantes(participacionesExperimento(e.getId()/e.getMaxRondas()));
 			}
 		} catch (Exception ex) {
 			System.err.println("Error al obtener el experimento");
-			ex.printStackTrace();
 		}
 		return e;
 	}
@@ -633,7 +621,6 @@ public class ExperimentApplicationDAO {
 			}
 		} catch (Exception ex) {
 			System.err.println("Error al obtener el experimento");
-			ex.printStackTrace();
 		}
 		return te;
 	}
@@ -653,7 +640,6 @@ public class ExperimentApplicationDAO {
 			}
 		} catch (Exception ex) {
 			System.err.println("Error al obtener la participacion");
-			ex.printStackTrace();
 		}
 		return id;
 	}
@@ -675,7 +661,6 @@ public class ExperimentApplicationDAO {
 			}
 		} catch (Exception ex){
 			System.err.println("Error al obtener el experimento");
-			ex.printStackTrace();
 		}
 		return lista;
 	}

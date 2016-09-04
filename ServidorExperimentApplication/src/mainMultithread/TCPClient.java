@@ -21,6 +21,8 @@ public class TCPClient {
 	private static final int SERVER_PORT = 12003;
 	private static final IUsuario client = new UserFacade();
 
+	private TCPClient(){}
+	
 	public static void main(String[] args) throws IOException {
 
 		System.out.println("Servidor de clientes INICIADO");
@@ -40,7 +42,7 @@ public class TCPClient {
 	}
 
 	public static int bytesToInteger(byte[] bytes) {
-		return (((bytes[3] & 0xff) << 24) | ((bytes[2] & 0xff) << 16) | ((bytes[1] & 0xff) << 8) | (bytes[0] & 0xff));
+		return ((bytes[3] & 0xff) << 24) | ((bytes[2] & 0xff) << 16) | ((bytes[1] & 0xff) << 8) | (bytes[0] & 0xff);
 	}
 
 	public static float bytesToFloat(byte[] bytes) {

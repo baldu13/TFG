@@ -8,9 +8,10 @@ import dao.ExperimentApplicationDAO;
 import model.*;
 
 public class TestMySQL {
-	   
-	public static void main(String[] args) {
-		
+	
+	private TestMySQL(){}
+	
+	public static void main(String[] args) {	
 		IAdministracion admin = new AdminFacade();
 		IUsuario user = new UserFacade();
 		ExperimentApplicationDAO dao = new ExperimentApplicationDAO();

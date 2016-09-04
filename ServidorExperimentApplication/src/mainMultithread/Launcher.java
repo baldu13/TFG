@@ -4,6 +4,8 @@ import java.io.IOException;
 
 public class Launcher {
 
+	private Launcher(){}
+	
 	public static void main(String[] args){
 		new Thread(){
 			@Override
@@ -26,5 +28,10 @@ public class Launcher {
 				}
 			}
 		}.start();
+		try{
+			while(true){
+				System.in.read();
+			}
+		}catch(Exception e){}
 	}
 }

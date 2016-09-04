@@ -2,8 +2,6 @@ package test;
 
 import presentation.*;
 
-import java.util.List;
-
 import model.*;
 
 public class TestUsuario {
