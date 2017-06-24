@@ -93,7 +93,7 @@ public class ExperimentApplicationDAO {
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
-			sql = "INSERT INTO experimento(fecha, maxRondas, grupal, numGrupos, tipo, nombre) VALUES (?,?,?,?,?,?)";
+			sql = "INSERT INTO experimento(fecha, maxRondas, grupal, numGrupos, tipo, nombre, fpublico, fprivado) VALUES (?,?,?,?,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setDate(1, getActualSQLDate());
 			pstmt.setInt(2, e.getMaxRondas());
@@ -101,6 +101,8 @@ public class ExperimentApplicationDAO {
 			pstmt.setInt(4, e.getNumGrupos());
 			pstmt.setInt(5, e.getTipo().getId());
 			pstmt.setString(6, e.getNombre());
+			pstmt.setFloat(7, e.getfPublico());
+			pstmt.setFloat(8, e.getfPrivado());
 			pstmt.execute();
 
 			sql = "SELECT id FROM experimento WHERE nombre=?";
@@ -237,7 +239,7 @@ public class ExperimentApplicationDAO {
 		}
 	}
 	
-	private int participacionesExperimento(int idExperimento) {
+	public int participacionesExperimento(int idExperimento) {
 		try {
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 			stmt = conn.createStatement();
@@ -663,5 +665,74 @@ public class ExperimentApplicationDAO {
 			System.err.println("Error al obtener el experimento");
 		}
 		return lista;
+	}
+	
+	public int getidExperimentoUsuario(String user) {
+		int idExperimento = -1;
+		try {
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+
+			// Consultamos el id del usuario (si existe)
+			sql = "SELECT id FROM usuario WHERE usuario=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, user);
+			ResultSet rs = pstmt.executeQuery();
+
+			int idUsuario = -1;
+			if (!rs.next()) {
+				return idExperimento;
+			} else {
+				idUsuario = rs.getInt("id");
+			}
+
+			// Buscamos el id del experimento en el que participa
+			sql = "SELECT experimento FROM participacion WHERE usuario=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idUsuario);
+			rs = pstmt.executeQuery();
+
+			if (!rs.next()) {
+				return idExperimento;
+			} else {
+				idExperimento = rs.getInt("experimento");
+			}
+		} catch (Exception ex) {
+			System.err.println("Error al obtener el experimento de un usuario");
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
+			} catch (Exception ex) {
+				System.err.println(errorConexion);
+			}
+		}
+		return idExperimento;
+	}
+	
+	public float[] getRatiosExperimento(int idExperimento){
+		float[] ratios = new float[2];
+		try {
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			stmt = conn.createStatement();
+
+			// Consultamos el id del usuario (si existe)
+			sql = "SELECT fpublico, fprivado FROM experimento WHERE id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idExperimento);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				ratios[0] = rs.getFloat("fpublico");
+				ratios[1] = rs.getFloat("fprivado");
+			}
+		} catch (Exception ex){
+			System.err.println("Error al obtener el experimento");
+		}
+		return ratios;
 	}
 }

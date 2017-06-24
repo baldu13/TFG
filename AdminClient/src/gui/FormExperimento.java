@@ -22,13 +22,15 @@ public class FormExperimento extends JFrame {
 	private JTextField textFieldUsuarios;
 	private JTextField textFieldRondas;
 	private JTextField textFieldGrupos;
+	private JTextField textFPublico;
+	private JTextField textFPrivado;
 
 	/**
 	 * Create the frame.
 	 */
 	public FormExperimento(JFrame main) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 360);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -85,10 +87,46 @@ public class FormExperimento extends JFrame {
 		contentPane.add(textFieldGrupos);
 		textFieldGrupos.setColumns(10);
 		
+		JLabel lblFondoPublico = new JLabel("Ratio fondo p\u00FAblico:");
+		lblFondoPublico.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblFondoPublico.setBounds(46, 215, 177, 22);
+		contentPane.add(lblFondoPublico);
+		
+		JLabel lblRatioFondoPrivado = new JLabel("Ratio fondo privado:");
+		lblRatioFondoPrivado.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRatioFondoPrivado.setBounds(46, 248, 177, 22);
+		contentPane.add(lblRatioFondoPrivado);
+		
+		textFPublico = new JTextField();
+		textFPublico.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFPublico.setColumns(10);
+		textFPublico.setBounds(221, 218, 47, 19);
+		textFPublico.setEnabled(false);
+		contentPane.add(textFPublico);
+		
+		textFPrivado = new JTextField();
+		textFPrivado.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textFPrivado.setColumns(10);
+		textFPrivado.setBounds(221, 248, 47, 19);
+		textFPrivado.setEnabled(false);
+		contentPane.add(textFPrivado);
+		
 		JComboBox<String> comboBoxTipo = new JComboBox<String>();
 		comboBoxTipo.setBounds(221, 182, 187, 20);
 		comboBoxTipo.addItem("Beauty Contest");
 		comboBoxTipo.addItem("Fondo público y privado");
+		comboBoxTipo.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e){
+				//Habilitar/Deshabilitar input de fondopublico
+				if(!((String) comboBoxTipo.getSelectedItem()).equals("Fondo público y privado")){
+					textFPublico.setEnabled(false);
+					textFPrivado.setEnabled(false);
+				} else {
+					textFPublico.setEnabled(true);
+					textFPrivado.setEnabled(true);
+				}
+			}
+		});
 		contentPane.add(comboBoxTipo);
 		
 		JLabel lblTitulo = new JLabel("Introduzca los datos para la creaci\u00F3n del experimento:");
@@ -109,7 +147,7 @@ public class FormExperimento extends JFrame {
 					te.setId(2);
 					te.setTipo((String)comboBoxTipo.getSelectedItem());
 				}
-				CrearExperimentoResponseDTO response = ServerConnection.crearExperimento(textFieldNombre.getText(), te, Integer.parseInt(textFieldUsuarios.getText()), Integer.parseInt(textFieldGrupos.getText()), Integer.parseInt(textFieldRondas.getText()));
+				CrearExperimentoResponseDTO response = ServerConnection.crearExperimento(textFieldNombre.getText(), te, Integer.parseInt(textFieldUsuarios.getText()), Integer.parseInt(textFieldGrupos.getText()), Integer.parseInt(textFieldRondas.getText()), Float.parseFloat(textFPublico.getText()), Float.parseFloat(textFPrivado.getText()));
 				if(response!=null){
 					setVisible(false);
 					new SaveUsuarios(main,response);
@@ -120,7 +158,7 @@ public class FormExperimento extends JFrame {
 				}
 			}
 		});
-		btnCrear.setBounds(322, 227, 89, 23);
+		btnCrear.setBounds(319, 287, 89, 23);
 		contentPane.add(btnCrear);
 		
 		JButton btnCancelar = new JButton("Cancelar");
@@ -132,7 +170,7 @@ public class FormExperimento extends JFrame {
 				setVisible(false);
 			}
 		});
-		btnCancelar.setBounds(221, 227, 89, 23);
+		btnCancelar.setBounds(221, 287, 89, 23);
 		contentPane.add(btnCancelar);
 	}
 }

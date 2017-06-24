@@ -68,4 +68,14 @@ public class UserFacade implements IUsuario{
 	public boolean isRoundFinish(int idExperimento, int ronda, int tipoExperimento){
 		return resultados.isRoundFinish(idExperimento, ronda, tipoExperimento);
 	}
+	
+	@Override
+	public float[] getRatiosExperimento(int idExperimento){
+		return experimentos.getRatiosExperimento(idExperimento);
+	}
+	
+	@Override
+	public int getResultadosFondos(int idExperimento){
+		return experimentos.getResultadosFondos(idExperimento);
+	}
 }

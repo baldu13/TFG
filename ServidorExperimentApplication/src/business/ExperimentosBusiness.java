@@ -136,4 +136,12 @@ public class ExperimentosBusiness {
 	public List<Usuario> getUsuariosExperimento(int id){
 		return dao.getUsuariosExperimento(id);
 	}
+	
+	public float[] getRatiosExperimento(int idExperimento){
+		return dao.getRatiosExperimento(idExperimento);
+	}
+	
+	public int getResultadosFondos(int idExperimento){
+		return dao.participacionesExperimento(idExperimento);
+	}
 }

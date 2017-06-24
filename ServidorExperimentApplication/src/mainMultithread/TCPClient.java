@@ -52,9 +52,20 @@ public class TCPClient {
 	public static byte[] intToBytes(int value) {
 		return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
 	}
+	
+	public static byte[] floatToBytes(float value){
+		int bits = Float.floatToIntBits(value);
+		byte[] bytes = new byte[4];
+		bytes[0] = (byte)(bits & 0xff);
+		bytes[1] = (byte) ((bits >> 8) & 0xff);
+		bytes[2] = (byte) ((bits >> 16) & 0xff);
+		bytes[3] = (byte) ((bits >> 24) & 0xff);
+		return bytes;
+	}
 
 	private static void processCall(Socket socket) {
 		try {
+			System.out.println("Peticion recibida");
 			InputStream is = socket.getInputStream();
 			OutputStream os = socket.getOutputStream();
 
@@ -167,6 +178,23 @@ public class TCPClient {
 					client.enviaResultadoFondoPublico(rfp, l);
 					break;
 				}
+				break;
+			case 3: //Ratios del experimento
+				var = new byte[4];
+				is.read(var, 0, 4);
+				l = bytesToInteger(var); // idExperimento
+				
+				float[] ratios = client.getRatiosExperimento(l);
+				os.write(floatToBytes(ratios[0]));
+				os.write(floatToBytes(ratios[1]));
+				break;
+			case 4: //NumParticipantes
+				var = new byte[4];
+				is.read(var, 0, 4);
+				l = bytesToInteger(var); // idExperimento
+				
+				int numParticipantes = client.getResultadosFondos(l);
+				os.write(intToBytes(numParticipantes));
 				break;
 			default:
 			}

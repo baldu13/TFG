@@ -27,7 +27,7 @@ public class TestAdministracion {
 		TipoExperimento te = new TipoExperimento();
 		te.setId(1);
 		//Verificamos que los datos devueltos son correctos
-		CrearExperimentoResponseDTO response = admin.crearExperimento("Primer experimento", te, 6, 3, 4);
+		CrearExperimentoResponseDTO response = admin.crearExperimento("Primer experimento", te, 6, 3, 4,1.5f,1f);
 		for(Usuario u: response.getUsuarios()){
 			System.out.println("Usuario: "+u.getUsuario()+
 					"\nClave: "+u.getClave()+"\n");
@@ -40,7 +40,7 @@ public class TestAdministracion {
 		//Creamos otro experimento para mostrar mas de uno
 		TipoExperimento te = new TipoExperimento();
 		te.setId(2);
-		admin.crearExperimento("Segundo experimento", te, 9, 1, 3);
+		admin.crearExperimento("Segundo experimento", te, 9, 1, 3, 1.5f, 1f);
 		
 		//Comprobamos la lista de experimentos
 		List<Experimento> lista = admin.getExperimentos();

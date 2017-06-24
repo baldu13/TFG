@@ -12,10 +12,15 @@ public class Experimento {
 	private int numParticipantes;
 	private boolean grupal;
 	private int numGrupos;
+	private float fPublico;
+	private float fPrivado;
 	private TipoExperimento tipo;
 	
 	//Metodos
-	public Experimento() {}
+	public Experimento() {
+		fPublico = 1.5f;
+		fPrivado = 1f;
+	}
 
 	public int getId() {
 		return id;
@@ -72,5 +77,21 @@ public class Experimento {
 
 	public void setNumParticipantes(int numParticipantes) {
 		this.numParticipantes = numParticipantes;
+	}
+
+	public float getfPublico() {
+		return fPublico;
+	}
+
+	public void setfPublico(float fPublico) {
+		this.fPublico = fPublico;
+	}
+
+	public float getfPrivado() {
+		return fPrivado;
+	}
+
+	public void setfPrivado(float fPrivado) {
+		this.fPrivado = fPrivado;
 	}	
 }

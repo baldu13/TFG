@@ -17,12 +17,14 @@ public class AdminFacade implements IAdministracion{
 	}
 	
 	@Override
-	public CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas) {
+	public CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas, float fPublico, float fPrivado) {
 		Experimento e = new Experimento();
 		e.setMaxRondas(numRondas);
 		e.setNombre(nombre);
 		e.setNumGrupos(tamanoGrupos);
 		e.setTipo(tipo);
+		e.setfPublico(fPublico);
+		e.setfPrivado(fPrivado);
 		if(tamanoGrupos!=0){
 			e.setGrupal(true);
 		}

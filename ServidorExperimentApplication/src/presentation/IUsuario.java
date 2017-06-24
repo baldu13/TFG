@@ -14,4 +14,8 @@ public interface IUsuario {
 	 * Solo retorna el id del experimento y el tipo
 	 */
 	Experimento logeaExperimento(String usuario, String clave);
+	
+	float[] getRatiosExperimento(int idExperimento);
+	
+	int getResultadosFondos(int idExperimento);
 }

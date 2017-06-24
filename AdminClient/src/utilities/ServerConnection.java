@@ -18,7 +18,7 @@ public class ServerConnection {
 	
 	private ServerConnection(){}
 
-	public static CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas){
+	public static CrearExperimentoResponseDTO crearExperimento(String nombre, TipoExperimento tipo, int numUsuarios, int tamanoGrupos, int numRondas, float fPublico, float fPrivado){
 		CrearExperimentoResponseDTO response = new CrearExperimentoResponseDTO();
 		try{
 			Socket clientSocket = new Socket(SERVER_IP, SERVER_PORT);   
@@ -32,6 +32,8 @@ public class ServerConnection {
 			outToServer.writeInt(numUsuarios);
 			outToServer.writeInt(tamanoGrupos);
 			outToServer.writeInt(numRondas);
+			outToServer.writeFloat(fPublico);
+			outToServer.writeFloat(fPrivado);
 			//Leemos la respuesta
 			response.setIdExperimento(inFromServer.readInt());
 			numUsuarios = inFromServer.readInt();
